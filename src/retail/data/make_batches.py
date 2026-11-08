@@ -1,13 +1,4 @@
-"""Découpage de l'historique en lots hebdomadaires pour simuler l'arrivée de données.
-
-Hypothèse documentée (docs/DATA.md) : le dataset historique est **rejoué** semaine par
-semaine ; chaque fichier ``data/batches/<AAAA-Www>.parquet`` représente les factures
-reçues pendant une semaine ISO (lundi 00:00 -> dimanche 23:59).
-
-Les semaines incomplètes en bord de période (début déc. 2010, fin déc. 2011) sont
-écartées par défaut : elles fausseraient les volumes hebdomadaires. Un trou interne
-(ex. 2010-W52, fermeture de Noël) est listé dans ``missing_weeks`` du manifeste.
-"""
+"""Lots ISO (lundi-dimanche). Semaines de bord incomplètes écartées ; trou 2010-W52 au manifeste."""
 
 from __future__ import annotations
 

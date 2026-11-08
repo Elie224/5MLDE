@@ -1,11 +1,4 @@
-"""Chargement et validation de la configuration.
-
-Deux sources, volontairement séparées :
-- les fichiers YAML de ``configs/`` (règles métier, chemins, source des données), versionnés ;
-- les variables d'environnement / ``.env`` (ports, identifiants), jamais versionnées.
-
-Les chemins relatifs sont résolus par rapport à la racine du dépôt, pas au CWD.
-"""
+"""YAML dans ``configs/``, secrets dans ``.env``. Chemins relatifs à la racine du dépôt."""
 
 from __future__ import annotations
 

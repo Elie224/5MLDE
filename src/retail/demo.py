@@ -45,7 +45,7 @@ PROM_ALERT_WAIT_S = 45.0
 
 
 class DemoError(ReplayError):
-    """Etape de demonstration en echec."""
+    """Étape de démonstration en échec."""
 
 
 def pick_demo_weeks(
@@ -250,7 +250,7 @@ def step_checks(app, *, skip_docker: bool = False) -> dict[str, Any]:
 
 
 def _ensure_mae_champion(app) -> str:
-    """Si l'alias champion a perdu la MAE, revenir au ``previous_champion``."""
+    """Revient au ``previous_champion`` si l'alias actuel a perdu la MAE."""
     client = _client()
     name = _model_name(app)
     current = _alias_version(client, name, "champion")
@@ -275,11 +275,7 @@ def _ensure_mae_champion(app) -> str:
 
 
 def prepare_rollback_chain(app) -> str:
-    """Assure un champion MAE-valide, puis une chaine ``previous_champion`` pour le rollback.
-
-    Le challenger temporaire peut etre moins bon : c'est volontaire pour la scene 4.
-    ``finally`` restaure le champion legal (valeur de retour), pas le temporaire.
-    """
+    """Champion MAE-valide, puis une chaîne ``previous_champion`` pour la scène rollback."""
     legal = _ensure_mae_champion(app)
     client = _client()
     name = _model_name(app)

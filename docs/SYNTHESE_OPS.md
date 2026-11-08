@@ -10,7 +10,7 @@ chemins fichier Windows inutilisables dans le conteneur). CSV : `load_tests/resu
 même poste**. Locust (un cœur) ou la file SQL (`retail_db_dropped_total`) peuvent
 saturer avant l'API. `docker stats` CPU% = **part d'un cœur** (100 % = 1 vCPU).
 
-## Série 1 — avant optimisation (7 nov. 2026, 21 h 30 → 21 h 42)
+## Série 1 : avant optimisation (7 nov. 2026, 21 h 30 → 21 h 42)
 
 Run `python load_tests/run.py`, fichier `load_tests/results/summary.json`. Les trois
 configurations ont bien été servies par le conteneur (`source: disk`, `degraded: false`,
@@ -87,7 +87,7 @@ Ce chiffre n'atteint pas p95 < 200 ms : il sera remplacé par la série 2.
 - Le bloc `endpoints` de `summary.json` reprend la **dernière fenêtre** et non le total :
   utiliser `*_stats.csv` pour les chiffres par endpoint.
 
-## Série 2 — après optimisation (7 nov. 2026, 22 h 05 → 22 h 25)
+## Série 2 : après optimisation (7 nov. 2026, 22 h 05 → 22 h 25)
 
 Corrections appliquées : dossier panel relu au plus toutes les 5 s, `/predict/batch` en
 une seule insertion SQL, compteur d'abandons réparé, paliers 2 → 320 users. Les trois
@@ -110,12 +110,12 @@ Il faudrait un palier intermédiaire (15 users) pour la préciser.
 
 | Config | 2 | 5 | 10 | 20 | 40 | 80 | 160 | 320 users |
 |---|---|---|---|---|---|---|---|---|
-| 1w — req/s | 12,4 | 29,8 | 32,4 | 29,3 | 23,4 | 21,7 | 22,3 | 21,5 |
-| 1w — p95 (ms) | 51 | 120 | 310 | 1 500 | 3 800 | 6 000 | 6 800 | 17 000 |
-| 2w — req/s | 12,9 | 31,0 | 55,8 | 49,9 | 40,0 | 33,3 | 33,5 | 34,7 |
-| 2w — p95 (ms) | 27 | 49 | 110 | 720 | 1 900 | 4 100 | 9 800 | 16 000 |
-| 4w — req/s | 12,3 | 31,3 | 60,2 | 81,6 | 77,0 | 80,8 | 68,4 | 58,0 |
-| 4w — p95 (ms) | 34 | 49 | 60 | 360 | 1 200 | 2 100 | 4 900 | 11 000 |
+| 1w req/s | 12,4 | 29,8 | 32,4 | 29,3 | 23,4 | 21,7 | 22,3 | 21,5 |
+| 1w p95 (ms) | 51 | 120 | 310 | 1 500 | 3 800 | 6 000 | 6 800 | 17 000 |
+| 2w req/s | 12,9 | 31,0 | 55,8 | 49,9 | 40,0 | 33,3 | 33,5 | 34,7 |
+| 2w p95 (ms) | 27 | 49 | 110 | 720 | 1 900 | 4 100 | 9 800 | 16 000 |
+| 4w req/s | 12,3 | 31,3 | 60,2 | 81,6 | 77,0 | 80,8 | 68,4 | 58,0 |
+| 4w p95 (ms) | 34 | 49 | 60 | 360 | 1 200 | 2 100 | 4 900 | 11 000 |
 
 ### Avant / après optimisation
 

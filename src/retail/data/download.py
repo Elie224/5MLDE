@@ -1,14 +1,4 @@
-"""Ingestion reproductible de la source UCI Online Retail.
-
-Étapes :
-1. récupérer l'archive (téléchargement borné à ``max_attempts`` essais, pas de retry infini) ;
-2. vérifier son empreinte SHA256 contre celle figée dans ``configs/data.yaml`` ;
-3. extraire le fichier Excel et le convertir en Parquet typé (``data/interim``) ;
-4. écrire un manifeste (empreintes, volumétrie, période couverte) pour la traçabilité.
-
-Repli manuel : si le site UCI est inaccessible, déposer l'archive ``online_retail.zip``
-(ou directement ``Online Retail.xlsx``) dans ``data/raw/`` puis relancer la commande.
-"""
+"""Téléchargement UCI, contrôle SHA256, conversion Parquet. Repli : zip dans ``data/raw/``."""
 
 from __future__ import annotations
 

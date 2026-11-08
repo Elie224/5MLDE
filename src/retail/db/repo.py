@@ -251,6 +251,7 @@ def persist_run(row: dict[str, Any]) -> None:
 
 
 def persist_alert(row: dict[str, Any]) -> None:
+    """Sync, comme ``persist_run`` : un process CLI court tuerait le worker daemon."""
     try:
         insert_alert(row)
     except Exception as exc:
