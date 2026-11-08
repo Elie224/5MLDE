@@ -1,0 +1,121 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: retail-postgres
+    ports:
+      - "${POSTGRES_PORT:-5437}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-retail}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-retail}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-retail} -d ${POSTGRES_DB:-retail}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.22.2
+    container_name: retail-mlflow
+    command:
+      - mlflow
+      - server
+      - --host
+      - 0.0.0.0
+      - --port
+      - "5000"
+      - --backend-store-uri
+      - sqlite:////mlflow/mlflow.db
+      - --artifacts-destination
+      - /mlflow/artifacts
+      - --serve-artifacts
+    ports:
+      - "${MLFLOW_PORT:-5001}:5000"
+    volumes:
+      - mlflow-data:/mlflow
+    environment:
+      MLFLOW_HTTP_REQUEST_MAX_RETRIES: "0"
+      MLFLOW_HTTP_REQUEST_TIMEOUT: "2"
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: retail-prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    ports:
+      - "${PROMETHEUS_PORT:-9091}:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus-data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    container_name: retail-grafana
+    ports:
+      - "${GRAFANA_PORT:-3001}:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      POSTGRES_USER: ${POSTGRES_USER:-retail}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-retail}
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      prometheus:
+        condition: service_started
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  api:
+    profiles: ["load"]
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: retail-api
+    cpus: ${API_CPUS:-0.50}
+    mem_limit: ${API_MEM:-1g}
+    ports:
+      - "${API_PORT:-8001}:8001"
+    environment:
+      RETAIL_CONFIG: configs/config.yaml
+      RETAIL_DATA_CONFIG: configs/data.yaml
+      RETAIL_LOG_LEVEL: INFO
+      RETAIL_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-retail}:${POSTGRES_PASSWORD:-change-me}@host.docker.internal:${POSTGRES_PORT:-5437}/${POSTGRES_DB:-retail}
+      RETAIL_SKIP_REGISTRY_PROBE: "1"
+      RETAIL_CHAMPION_POLL_SECONDS: "0"
+      API_WORKERS: ${API_WORKERS:-1}
+      API_HOST: "0.0.0.0"
+      API_PORT: "8001"
+      PROMETHEUS_MULTIPROC_DIR: /tmp/prom
+    tmpfs:
+      - /tmp/prom
+    volumes:
+      - ./configs:/app/configs:ro
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./models:/app/models
+    command: ["python", "-m", "retail.api.serve"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  mlflow-data:
+  postgres-data:
+  prometheus-data:

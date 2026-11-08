@@ -1,0 +1,43 @@
+groups:
+  - name: retail
+    rules:
+      - alert: RetailDegraded
+        expr: retail_model_degraded == 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Mode dégradé depuis plus d'une minute
+          description: L'API sert le champion disque (MLflow injoignable ou repli).
+
+      - alert: RetailHigh5xx
+        expr: |
+          (
+            sum(rate(retail_http_requests_total{status=~"5..",path!~"/metrics|/health.*"}[5m]))
+            /
+            clamp_min(sum(rate(retail_http_requests_total{path!~"/metrics|/health.*"}[5m])), 1e-9)
+          ) > 0.05
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Plus de 5 % de réponses 5xx
+          description: Taux d'erreurs serveur au-dessus du seuil de démonstration.
+
+      - alert: RetailApiDown
+        expr: up{job="retail-api"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: API injoignable
+          description: Prometheus n'atteint plus /metrics sur le job retail-api.
+
+      - alert: RetailDbDown
+        expr: retail_db_ok == 0
+        for: 15s
+        labels:
+          severity: warning
+        annotations:
+          summary: Base de traces injoignable
+          description: /predict continue ; /health a db_ok=false (jauge retail_db_ok).

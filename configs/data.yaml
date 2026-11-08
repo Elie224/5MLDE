@@ -1,0 +1,14 @@
+# Source des données : figée ici une fois pour toutes (voir docs/DATA.md)
+source:
+  name: UCI Online Retail
+  url: https://archive.ics.uci.edu/static/public/352/online+retail.zip
+  license: CC BY 4.0
+  doi: 10.24432/C5BW33
+  archive_filename: online_retail.zip
+  excel_filename: Online Retail.xlsx
+  # SHA256 de l'archive UCI (figé au premier téléchargement réussi).
+  sha256: "f5385cbb54bbebf7196389109c6b0621faab0c304e3702548165e71c84aede8b"
+
+download:
+  timeout_seconds: 60
+  max_attempts: 2

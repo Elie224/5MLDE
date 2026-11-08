@@ -1,0 +1,1334 @@
+[
+  {
+    "name": "1w_0p5cpu",
+    "workers": "1",
+    "cpus": "0.50",
+    "health": {
+      "degraded": false,
+      "source": "disk",
+      "model_version": "1",
+      "db_backend": "postgresql"
+    },
+    "db_dropped_delta": 0.0,
+    "cpu_note": "docker stats CPU% = part d'un c\u0153ur (100% = 1 vCPU)",
+    "single_machine": true,
+    "cpu_samples": [
+      {
+        "ts": 1794085525.0171752,
+        "api_cpu": "17.12%",
+        "api_mem": "289.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085531.3013363,
+        "api_cpu": "11.07%",
+        "api_mem": "289.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085537.3985445,
+        "api_cpu": "20.06%",
+        "api_mem": "290.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085543.733443,
+        "api_cpu": "18.69%",
+        "api_mem": "290.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085550.2006757,
+        "api_cpu": "14.55%",
+        "api_mem": "290.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085556.5183306,
+        "api_cpu": "17.42%",
+        "api_mem": "290.5MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085563.5470605,
+        "api_cpu": "12.54%",
+        "api_mem": "290.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085570.3198817,
+        "api_cpu": "41.28%",
+        "api_mem": "291.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085576.6151164,
+        "api_cpu": "36.33%",
+        "api_mem": "291.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085583.519673,
+        "api_cpu": "38.31%",
+        "api_mem": "290.4MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085590.407253,
+        "api_cpu": "35.33%",
+        "api_mem": "291.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085596.514259,
+        "api_cpu": "45.91%",
+        "api_mem": "290.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085603.5958982,
+        "api_cpu": "43.94%",
+        "api_mem": "291.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085610.5249772,
+        "api_cpu": "34.34%",
+        "api_mem": "291.5MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085616.625978,
+        "api_cpu": "49.52%",
+        "api_mem": "292.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085623.562003,
+        "api_cpu": "51.14%",
+        "api_mem": "291.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085630.4038017,
+        "api_cpu": "48.48%",
+        "api_mem": "291.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085636.5007093,
+        "api_cpu": "48.01%",
+        "api_mem": "292.5MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085643.5581772,
+        "api_cpu": "49.62%",
+        "api_mem": "292MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085650.285265,
+        "api_cpu": "48.30%",
+        "api_mem": "292.4MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085656.6081023,
+        "api_cpu": "50.53%",
+        "api_mem": "292.2MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085663.6164722,
+        "api_cpu": "49.31%",
+        "api_mem": "293.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085670.3983464,
+        "api_cpu": "49.28%",
+        "api_mem": "293.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085676.5036335,
+        "api_cpu": "50.45%",
+        "api_mem": "294.4MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085683.605377,
+        "api_cpu": "50.24%",
+        "api_mem": "294.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085690.5506835,
+        "api_cpu": "49.04%",
+        "api_mem": "293.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085696.6966608,
+        "api_cpu": "50.54%",
+        "api_mem": "293.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085703.6347654,
+        "api_cpu": "47.76%",
+        "api_mem": "295.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085710.3825374,
+        "api_cpu": "51.13%",
+        "api_mem": "297.4MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085716.6856782,
+        "api_cpu": "50.64%",
+        "api_mem": "298.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085723.6791084,
+        "api_cpu": "49.60%",
+        "api_mem": "297.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085730.3946161,
+        "api_cpu": "48.73%",
+        "api_mem": "296.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085736.5073366,
+        "api_cpu": "50.03%",
+        "api_mem": "296.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085743.6241632,
+        "api_cpu": "50.78%",
+        "api_mem": "298.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085750.5232413,
+        "api_cpu": "48.75%",
+        "api_mem": "297.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085756.6167607,
+        "api_cpu": "51.04%",
+        "api_mem": "297.5MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085763.6497111,
+        "api_cpu": "50.73%",
+        "api_mem": "297.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085770.5104532,
+        "api_cpu": "50.71%",
+        "api_mem": "297.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085776.7117012,
+        "api_cpu": "51.23%",
+        "api_mem": "297.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085783.6988556,
+        "api_cpu": "51.45%",
+        "api_mem": "298.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085790.4932969,
+        "api_cpu": "48.56%",
+        "api_mem": "297.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085796.6223269,
+        "api_cpu": "49.74%",
+        "api_mem": "297.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085803.7128131,
+        "api_cpu": "49.94%",
+        "api_mem": "299MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085810.630509,
+        "api_cpu": "48.86%",
+        "api_mem": "298.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085816.8131914,
+        "api_cpu": "50.92%",
+        "api_mem": "299.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085823.694996,
+        "api_cpu": "48.57%",
+        "api_mem": "299.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085830.4104798,
+        "api_cpu": "49.59%",
+        "api_mem": "299.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085836.8102818,
+        "api_cpu": "50.80%",
+        "api_mem": "299.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085843.7982373,
+        "api_cpu": "51.13%",
+        "api_mem": "303.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085850.4851751,
+        "api_cpu": "50.27%",
+        "api_mem": "304.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085856.7779365,
+        "api_cpu": "50.06%",
+        "api_mem": "304.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085863.8359523,
+        "api_cpu": "48.87%",
+        "api_mem": "304.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085870.578233,
+        "api_cpu": "49.04%",
+        "api_mem": "304.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085876.8701706,
+        "api_cpu": "50.87%",
+        "api_mem": "304.2MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      }
+    ],
+    "phases": {
+      "u2": {
+        "rps": 12.44,
+        "p95_ms": 51.0,
+        "errors": 0.0,
+        "requests": 560,
+        "users": "2"
+      },
+      "u5": {
+        "rps": 29.8,
+        "p95_ms": 120.0,
+        "errors": 0.0,
+        "requests": 1341,
+        "users": "5"
+      },
+      "u10": {
+        "rps": 32.42,
+        "p95_ms": 310.0,
+        "errors": 0.0,
+        "requests": 1459,
+        "users": "10"
+      },
+      "u20": {
+        "rps": 29.33,
+        "p95_ms": 1500.0,
+        "errors": 0.0,
+        "requests": 1320,
+        "users": "20"
+      },
+      "u40": {
+        "rps": 23.42,
+        "p95_ms": 3800.0,
+        "errors": 0.0,
+        "requests": 1054,
+        "users": "40"
+      },
+      "u80": {
+        "rps": 21.73,
+        "p95_ms": 6000.0,
+        "errors": 0.0,
+        "requests": 978,
+        "users": "80"
+      },
+      "u160": {
+        "rps": 22.33,
+        "p95_ms": 6800.0,
+        "errors": 0.0,
+        "requests": 1005,
+        "users": "160"
+      },
+      "u320": {
+        "rps": 21.47,
+        "p95_ms": 17000.0,
+        "errors": 0.0,
+        "requests": 966,
+        "users": "320"
+      }
+    },
+    "endpoints": {
+      "/health/live": {
+        "rps": 2.3686396437501624,
+        "p95_ms": 12000.0,
+        "p50_ms": 320.0,
+        "p99_ms": 14000.0,
+        "requests": 848,
+        "failures": 0
+      },
+      "/predict": {
+        "rps": 17.560893207850555,
+        "p95_ms": 14000.0,
+        "p50_ms": 510.0,
+        "p99_ms": 17000.0,
+        "requests": 6287,
+        "failures": 0
+      },
+      "/predict/batch": {
+        "rps": 4.890905679488838,
+        "p95_ms": 14000.0,
+        "p50_ms": 580.0,
+        "p99_ms": 16000.0,
+        "requests": 1751,
+        "failures": 0
+      },
+      "Aggregated": {
+        "rps": 24.820438531089554,
+        "p95_ms": 13000.0,
+        "p50_ms": 510.0,
+        "p99_ms": 16000.0,
+        "requests": 8886,
+        "failures": 0
+      }
+    },
+    "capacity": {
+      "rps": 29.8,
+      "p95_ms": 120.0,
+      "errors": 0.0,
+      "requests": 1341,
+      "users": "5",
+      "label": "u5"
+    }
+  },
+  {
+    "name": "2w_1cpu",
+    "workers": "2",
+    "cpus": "1.00",
+    "health": {
+      "degraded": false,
+      "source": "disk",
+      "model_version": "1",
+      "db_backend": "postgresql"
+    },
+    "db_dropped_delta": 0.0,
+    "cpu_note": "docker stats CPU% = part d'un c\u0153ur (100% = 1 vCPU)",
+    "single_machine": true,
+    "cpu_samples": [
+      {
+        "ts": 1794085915.9372513,
+        "api_cpu": "14.82%",
+        "api_mem": "548.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085922.6990597,
+        "api_cpu": "15.64%",
+        "api_mem": "548.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085928.8672235,
+        "api_cpu": "14.77%",
+        "api_mem": "548.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085935.2744613,
+        "api_cpu": "19.39%",
+        "api_mem": "547.9MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085941.6919332,
+        "api_cpu": "21.22%",
+        "api_mem": "548MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085947.8344207,
+        "api_cpu": "14.32%",
+        "api_mem": "547.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085954.252825,
+        "api_cpu": "14.42%",
+        "api_mem": "547.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085960.6142433,
+        "api_cpu": "33.80%",
+        "api_mem": "548.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085966.8798058,
+        "api_cpu": "50.87%",
+        "api_mem": "549MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085973.837009,
+        "api_cpu": "35.13%",
+        "api_mem": "549.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085980.6334083,
+        "api_cpu": "46.21%",
+        "api_mem": "548.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085986.948182,
+        "api_cpu": "48.42%",
+        "api_mem": "548.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794085993.9092586,
+        "api_cpu": "49.70%",
+        "api_mem": "548.5MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086000.6384883,
+        "api_cpu": "45.20%",
+        "api_mem": "548.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086006.9900563,
+        "api_cpu": "82.06%",
+        "api_mem": "549.5MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086013.8485901,
+        "api_cpu": "87.25%",
+        "api_mem": "550.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086020.8400018,
+        "api_cpu": "88.69%",
+        "api_mem": "549.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086026.9455082,
+        "api_cpu": "85.21%",
+        "api_mem": "549MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086033.964428,
+        "api_cpu": "81.67%",
+        "api_mem": "549.2MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086040.633067,
+        "api_cpu": "81.12%",
+        "api_mem": "549.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086046.9943845,
+        "api_cpu": "92.25%",
+        "api_mem": "549.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086053.9812946,
+        "api_cpu": "102.17%",
+        "api_mem": "550.2MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086060.6950727,
+        "api_cpu": "90.83%",
+        "api_mem": "551.3MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086067.0927558,
+        "api_cpu": "101.23%",
+        "api_mem": "551.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086074.00119,
+        "api_cpu": "99.45%",
+        "api_mem": "551.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086080.801222,
+        "api_cpu": "98.66%",
+        "api_mem": "551.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086086.9523766,
+        "api_cpu": "99.82%",
+        "api_mem": "551.2MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086094.006644,
+        "api_cpu": "99.95%",
+        "api_mem": "552.4MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086100.7419176,
+        "api_cpu": "99.77%",
+        "api_mem": "554.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086106.8877215,
+        "api_cpu": "98.57%",
+        "api_mem": "555.4MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086114.1722565,
+        "api_cpu": "102.24%",
+        "api_mem": "555.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086120.9563124,
+        "api_cpu": "101.81%",
+        "api_mem": "555.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086127.0978212,
+        "api_cpu": "94.05%",
+        "api_mem": "555MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086134.0430684,
+        "api_cpu": "101.48%",
+        "api_mem": "555MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086140.8102822,
+        "api_cpu": "99.75%",
+        "api_mem": "557MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086146.9670484,
+        "api_cpu": "88.69%",
+        "api_mem": "559.5MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086154.0383742,
+        "api_cpu": "99.60%",
+        "api_mem": "559.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086160.9497876,
+        "api_cpu": "98.86%",
+        "api_mem": "560.2MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086167.167666,
+        "api_cpu": "99.85%",
+        "api_mem": "560.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086174.4455807,
+        "api_cpu": "100.68%",
+        "api_mem": "560.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086180.9057612,
+        "api_cpu": "99.99%",
+        "api_mem": "560.2MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086187.2627125,
+        "api_cpu": "99.43%",
+        "api_mem": "562.4MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086194.1183956,
+        "api_cpu": "100.92%",
+        "api_mem": "563.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086200.872053,
+        "api_cpu": "100.83%",
+        "api_mem": "562.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086207.0044422,
+        "api_cpu": "100.58%",
+        "api_mem": "563.5MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086214.083629,
+        "api_cpu": "103.27%",
+        "api_mem": "563.8MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086220.84855,
+        "api_cpu": "98.97%",
+        "api_mem": "563.5MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086227.1903667,
+        "api_cpu": "100.38%",
+        "api_mem": "563.7MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086234.1308053,
+        "api_cpu": "98.05%",
+        "api_mem": "568.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086240.8280656,
+        "api_cpu": "99.36%",
+        "api_mem": "571.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086247.0381222,
+        "api_cpu": "101.17%",
+        "api_mem": "571.6MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086254.021624,
+        "api_cpu": "106.63%",
+        "api_mem": "572.1MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086261.0543463,
+        "api_cpu": "101.21%",
+        "api_mem": "571.2MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086267.25589,
+        "api_cpu": "101.06%",
+        "api_mem": "572.4MiB / 1GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086274.151586,
+        "api_cpu": "98.02%",
+        "api_mem": "572.6MiB / 1GiB",
+        "locust_cpu_pct": null
+      }
+    ],
+    "phases": {
+      "u2": {
+        "rps": 12.89,
+        "p95_ms": 27.0,
+        "errors": 0.0,
+        "requests": 580,
+        "users": "2"
+      },
+      "u5": {
+        "rps": 31.0,
+        "p95_ms": 49.0,
+        "errors": 0.0,
+        "requests": 1395,
+        "users": "5"
+      },
+      "u10": {
+        "rps": 55.78,
+        "p95_ms": 110.0,
+        "errors": 0.0,
+        "requests": 2510,
+        "users": "10"
+      },
+      "u20": {
+        "rps": 49.87,
+        "p95_ms": 720.0,
+        "errors": 0.0,
+        "requests": 2244,
+        "users": "20"
+      },
+      "u40": {
+        "rps": 40.04,
+        "p95_ms": 1900.0,
+        "errors": 0.0,
+        "requests": 1802,
+        "users": "40"
+      },
+      "u80": {
+        "rps": 33.33,
+        "p95_ms": 4100.0,
+        "errors": 0.0,
+        "requests": 1500,
+        "users": "80"
+      },
+      "u160": {
+        "rps": 33.49,
+        "p95_ms": 9800.0,
+        "errors": 0.0,
+        "requests": 1507,
+        "users": "160"
+      },
+      "u320": {
+        "rps": 34.69,
+        "p95_ms": 16000.0,
+        "errors": 0.0,
+        "requests": 1561,
+        "users": "320"
+      }
+    },
+    "endpoints": {
+      "/health/live": {
+        "rps": 3.7130374518502007,
+        "p95_ms": 6200.0,
+        "p50_ms": 210.0,
+        "p99_ms": 13000.0,
+        "requests": 1338,
+        "failures": 0
+      },
+      "/predict": {
+        "rps": 25.960736443990005,
+        "p95_ms": 9700.0,
+        "p50_ms": 380.0,
+        "p99_ms": 14000.0,
+        "requests": 9355,
+        "failures": 0
+      },
+      "/predict/batch": {
+        "rps": 7.634204805709942,
+        "p95_ms": 10000.0,
+        "p50_ms": 510.0,
+        "p99_ms": 15000.0,
+        "requests": 2751,
+        "failures": 0
+      },
+      "Aggregated": {
+        "rps": 37.30797870155015,
+        "p95_ms": 9200.0,
+        "p50_ms": 380.0,
+        "p99_ms": 14000.0,
+        "requests": 13444,
+        "failures": 0
+      }
+    },
+    "capacity": {
+      "rps": 55.78,
+      "p95_ms": 110.0,
+      "errors": 0.0,
+      "requests": 2510,
+      "users": "10",
+      "label": "u10"
+    }
+  },
+  {
+    "name": "4w_2cpu",
+    "workers": "4",
+    "cpus": "2.00",
+    "health": {
+      "degraded": false,
+      "source": "disk",
+      "model_version": "1",
+      "db_backend": "postgresql"
+    },
+    "db_dropped_delta": 0.0,
+    "cpu_note": "docker stats CPU% = part d'un c\u0153ur (100% = 1 vCPU)",
+    "single_machine": true,
+    "cpu_samples": [
+      {
+        "ts": 1794086313.3650403,
+        "api_cpu": "18.87%",
+        "api_mem": "1024MiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086319.5129216,
+        "api_cpu": "14.92%",
+        "api_mem": "1023MiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086325.9390802,
+        "api_cpu": "20.78%",
+        "api_mem": "1023MiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086332.9748638,
+        "api_cpu": "18.51%",
+        "api_mem": "1023MiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086339.1127064,
+        "api_cpu": "18.58%",
+        "api_mem": "1024MiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086345.5776513,
+        "api_cpu": "14.92%",
+        "api_mem": "1023MiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086351.9911551,
+        "api_cpu": "15.21%",
+        "api_mem": "1023MiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086358.0706627,
+        "api_cpu": "55.80%",
+        "api_mem": "1.019GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086364.5065148,
+        "api_cpu": "52.85%",
+        "api_mem": "1.019GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086370.9026613,
+        "api_cpu": "35.20%",
+        "api_mem": "1.019GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086377.235799,
+        "api_cpu": "59.79%",
+        "api_mem": "1.02GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086384.1393661,
+        "api_cpu": "47.80%",
+        "api_mem": "1.019GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086390.9409723,
+        "api_cpu": "50.54%",
+        "api_mem": "1.019GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086397.2443247,
+        "api_cpu": "46.74%",
+        "api_mem": "1.019GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086404.2573507,
+        "api_cpu": "139.29%",
+        "api_mem": "1.04GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086411.254628,
+        "api_cpu": "106.28%",
+        "api_mem": "1.04GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086417.3851078,
+        "api_cpu": "98.03%",
+        "api_mem": "1.04GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086424.4641814,
+        "api_cpu": "107.28%",
+        "api_mem": "1.04GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086431.0481997,
+        "api_cpu": "108.61%",
+        "api_mem": "1.04GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086437.193127,
+        "api_cpu": "101.91%",
+        "api_mem": "1.04GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086444.2440398,
+        "api_cpu": "97.29%",
+        "api_mem": "1.04GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086451.059403,
+        "api_cpu": "193.99%",
+        "api_mem": "1.042GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086457.211229,
+        "api_cpu": "197.41%",
+        "api_mem": "1.042GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086464.5565076,
+        "api_cpu": "202.82%",
+        "api_mem": "1.042GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086471.263659,
+        "api_cpu": "198.13%",
+        "api_mem": "1.042GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086477.4251726,
+        "api_cpu": "181.14%",
+        "api_mem": "1.042GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086484.7819312,
+        "api_cpu": "198.26%",
+        "api_mem": "1.043GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086491.6164134,
+        "api_cpu": "198.46%",
+        "api_mem": "1.043GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086497.8119402,
+        "api_cpu": "199.29%",
+        "api_mem": "1.045GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086504.50043,
+        "api_cpu": "207.81%",
+        "api_mem": "1.045GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086511.072678,
+        "api_cpu": "199.82%",
+        "api_mem": "1.045GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086517.5068324,
+        "api_cpu": "201.41%",
+        "api_mem": "1.044GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086524.7517076,
+        "api_cpu": "201.66%",
+        "api_mem": "1.046GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086531.6325388,
+        "api_cpu": "197.62%",
+        "api_mem": "1.046GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086538.0098128,
+        "api_cpu": "194.25%",
+        "api_mem": "1.049GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086544.5569549,
+        "api_cpu": "201.32%",
+        "api_mem": "1.052GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086551.2359042,
+        "api_cpu": "200.57%",
+        "api_mem": "1.052GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086557.631834,
+        "api_cpu": "199.97%",
+        "api_mem": "1.052GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086564.5734851,
+        "api_cpu": "192.12%",
+        "api_mem": "1.052GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086571.2569265,
+        "api_cpu": "205.30%",
+        "api_mem": "1.052GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086577.6254258,
+        "api_cpu": "201.01%",
+        "api_mem": "1.052GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086584.5915573,
+        "api_cpu": "200.39%",
+        "api_mem": "1.057GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086591.4212382,
+        "api_cpu": "201.37%",
+        "api_mem": "1.058GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086597.5999932,
+        "api_cpu": "198.77%",
+        "api_mem": "1.06GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086604.7490747,
+        "api_cpu": "196.70%",
+        "api_mem": "1.059GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086611.212419,
+        "api_cpu": "199.84%",
+        "api_mem": "1.059GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086617.374568,
+        "api_cpu": "196.20%",
+        "api_mem": "1.06GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086624.5332613,
+        "api_cpu": "205.60%",
+        "api_mem": "1.06GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086631.5447328,
+        "api_cpu": "198.50%",
+        "api_mem": "1.065GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086637.7172184,
+        "api_cpu": "123.74%",
+        "api_mem": "1.066GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086644.8232496,
+        "api_cpu": "205.31%",
+        "api_mem": "1.067GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086651.3713536,
+        "api_cpu": "178.39%",
+        "api_mem": "1.067GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086657.8273249,
+        "api_cpu": "207.85%",
+        "api_mem": "1.068GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086665.1128128,
+        "api_cpu": "205.74%",
+        "api_mem": "1.068GiB / 2GiB",
+        "locust_cpu_pct": 0.0
+      },
+      {
+        "ts": 1794086671.6250257,
+        "api_cpu": "188.47%",
+        "api_mem": "1.067GiB / 2GiB",
+        "locust_cpu_pct": null
+      }
+    ],
+    "phases": {
+      "u2": {
+        "rps": 12.27,
+        "p95_ms": 34.0,
+        "errors": 0.0,
+        "requests": 552,
+        "users": "2"
+      },
+      "u5": {
+        "rps": 31.33,
+        "p95_ms": 49.0,
+        "errors": 0.0,
+        "requests": 1410,
+        "users": "5"
+      },
+      "u10": {
+        "rps": 60.18,
+        "p95_ms": 60.0,
+        "errors": 0.0,
+        "requests": 2708,
+        "users": "10"
+      },
+      "u20": {
+        "rps": 81.62,
+        "p95_ms": 360.0,
+        "errors": 0.0,
+        "requests": 3673,
+        "users": "20"
+      },
+      "u40": {
+        "rps": 77.0,
+        "p95_ms": 1200.0,
+        "errors": 0.0,
+        "requests": 3465,
+        "users": "40"
+      },
+      "u80": {
+        "rps": 80.76,
+        "p95_ms": 2100.0,
+        "errors": 0.0,
+        "requests": 3634,
+        "users": "80"
+      },
+      "u160": {
+        "rps": 68.36,
+        "p95_ms": 4900.0,
+        "errors": 0.0,
+        "requests": 3076,
+        "users": "160"
+      },
+      "u320": {
+        "rps": 58.0,
+        "p95_ms": 11000.0,
+        "errors": 0.0,
+        "requests": 2610,
+        "users": "320"
+      }
+    },
+    "endpoints": {
+      "/health/live": {
+        "rps": 5.9961225130358535,
+        "p95_ms": 3900.0,
+        "p50_ms": 110.0,
+        "p99_ms": 6200.0,
+        "requests": 2162,
+        "failures": 0
+      },
+      "/predict": {
+        "rps": 41.96453734724584,
+        "p95_ms": 5500.0,
+        "p50_ms": 310.0,
+        "p99_ms": 8000.0,
+        "requests": 15131,
+        "failures": 0
+      },
+      "/predict/batch": {
+        "rps": 11.820293316632196,
+        "p95_ms": 5600.0,
+        "p50_ms": 370.0,
+        "p99_ms": 7900.0,
+        "requests": 4262,
+        "failures": 0
+      },
+      "Aggregated": {
+        "rps": 59.78095317691388,
+        "p95_ms": 5400.0,
+        "p50_ms": 290.0,
+        "p99_ms": 7800.0,
+        "requests": 21555,
+        "failures": 0
+      }
+    },
+    "capacity": {
+      "rps": 60.18,
+      "p95_ms": 60.0,
+      "errors": 0.0,
+      "requests": 2708,
+      "users": "10",
+      "label": "u10"
+    }
+  }
+]

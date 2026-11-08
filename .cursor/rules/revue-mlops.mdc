@@ -1,0 +1,24 @@
+---
+description: Revue MLOps retail
+alwaysApply: true
+---
+
+# Revue MLOps retail
+
+À chaque session, relire le dépôt contre le plan (`docs/PLAN.md`) et le sujet UCI Online Retail. Signaler les écarts.
+
+## Bloquant
+
+- Pas de notebook comme chemin principal. Config YAML + `.env`, pas de secrets.
+- Contrôles qualité **bloquants** avant train. Pas de retry Prefect sur erreur de données.
+- Top 50 figé sur `warmup_weeks` uniquement (anti-fuite).
+- SHA256 de l'archive UCI figé dans `configs/data.yaml` dès le premier téléchargement réussi.
+- Chemins de données relatifs à la **racine du dépôt**, pas au CWD.
+- API : `model_version` sur chaque réponse ; champion local pour le mode dégradé.
+- Démo : run nominal + lot invalide + dépendance down + rollback.
+
+## À ne pas casser
+
+- Replay hebdo ISO, semaines partielles écartées, lots dans `data/` gitignorés.
+- Promotion : battre le naïf pour enregistrer ; MAE ≤ champion pour promouvoir.
+- Ports du `.env.example` (5437, 5001, 4201, 8001, 3001, 9091).
