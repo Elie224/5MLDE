@@ -1,8 +1,8 @@
-# Données et artefacts : jamais dans Git (récupérés par `retail data`)
-data/
-models/
-mlruns/
-mlartifacts/
+# Données et artefacts à la racine (pas src/retail/data)
+/data/
+/models/
+/mlruns/
+/mlartifacts/
 load_tests/results/*
 !load_tests/results/summary.json
 
