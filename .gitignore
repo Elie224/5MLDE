@@ -1,0 +1,28 @@
+# Données et artefacts : jamais dans Git (récupérés par `retail data`)
+data/
+models/
+mlruns/
+mlartifacts/
+load_tests/results/*
+!load_tests/results/summary.json
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

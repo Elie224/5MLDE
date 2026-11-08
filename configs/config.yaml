@@ -1,0 +1,63 @@
+# Configuration métier et pipeline (aucun secret ici : voir .env)
+project:
+  name: retail-mlops
+  random_seed: 42
+
+paths:
+  raw_dir: data/raw
+  interim_dir: data/interim
+  batches_dir: data/batches
+  reports_dir: data/reports
+  models_dir: models
+
+batching:
+  # Rejeu de l'historique : un lot = une semaine ISO (lundi -> dimanche)
+  frequency: weekly
+  # La première (déc. 2010) et la dernière (déc. 2011) semaine du dataset sont incomplètes
+  drop_partial_weeks: true
+
+panel:
+  # Nombre de produits suivis. La liste est calculée sur les semaines de démarrage
+  # uniquement, puis figée (anti-fuite) : voir phase 3.
+  top_n_products: 50
+  warmup_weeks: 8
+
+# Seuils de qualité (phase 2) : un lot hors seuils arrête le pipeline (pas de retry, pas de train)
+quality:
+  min_rows_per_batch: 500
+  max_share_non_positive_price: 0.05
+  country: United Kingdom
+  max_abs_quantity: 10000
+  max_unit_price: 1000.0
+  # Après nettoyage de tous les lots : assez de SKU pour constituer le top 50 (phase 3)
+  min_distinct_skus: 50
+  non_product_codes:
+    - POST
+    - D
+    - M
+    - DOT
+    - C2
+    - BANK CHARGES
+    - AMAZONFEE
+    - S
+    - CRUK
+    - PADS
+    - B
+
+training:
+  # Dernières semaines = hold-out temporel (jamais mélangées au train)
+  test_weeks: 8
+  lags: [1, 2, 4]
+  rolling_weeks: 4
+
+promotion:
+  # Battre le modèle naïf pour être enregistré ; MAE <= champion pour être promu
+  metric: mae
+  must_beat_baseline: true
+  registered_model_name: retail-weekly-qty
+
+orchestration:
+  # Un lot toutes les 10 min en démo ; concurrence 1 sur le déploiement Prefect
+  interval_seconds: 600
+  train_retries: 2
+  train_retry_delay_seconds: 10
