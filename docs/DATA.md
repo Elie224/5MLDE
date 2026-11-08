@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| Jeu de données | **Online Retail** — UCI Machine Learning Repository |
+| Jeu de données | **Online Retail**, UCI Machine Learning Repository |
 | Page | https://archive.ics.uci.edu/dataset/352/online+retail |
 | Archive téléchargée | https://archive.ics.uci.edu/static/public/352/online+retail.zip |
 | DOI | 10.24432/C5BW33 |

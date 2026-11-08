@@ -49,11 +49,7 @@ def load_cursor(app: AppConfig) -> dict:
 
 
 def save_cursor(app: AppConfig, week: str, status: str, *, force: bool = False) -> None:
-    """N'écrit pas une semaine **antérieure** en `ok` (évite de reculer après `--week`).
-
-    ``force=True`` : ``retail demo --reset-cursor``. Un échec qualité/technique
-    pose toujours le curseur sur la semaine en cause.
-    """
+    """En ``ok``, ne recule pas le curseur (sauf ``force=True`` pour ``--reset-cursor``)."""
     if not force and status == "ok":
         current = load_cursor(app)
         last = current.get("last_week")
@@ -87,7 +83,7 @@ def append_run(app: AppConfig, payload: dict) -> None:
 
 
 def emit_alert(app: AppConfig, payload: dict) -> None:
-    """SQL synchrone, puis POST vers l'API. Copie locale si le webhook est absent ou en échec."""
+    """Écrit l'alerte en SQL, puis POST le webhook ; fichier local seulement si le POST échoue."""
     record = {
         "ts": datetime.now(UTC).isoformat(timespec="seconds"),
         **payload,
@@ -184,8 +180,7 @@ def train_lot(app: AppConfig, week: str) -> dict[str, Any]:
         return resume_week_version(app, str(existing.version))
     done = find_complete_week_version(app, week)
     if done is not None:
-        # Même lot rejoué (démo, relance manuelle) : mêmes données -> même modèle.
-        # Réentraîner créerait une version identique (cas v3/v5) : on la réutilise.
+        # Même until_week déjà complet : ne pas créer une version MLflow identique.
         log.info(
             "Lot déjà entraîné, pas de nouvelle version",
             extra={"week": week, "version": done.version},
@@ -238,10 +233,7 @@ def train_step(app: AppConfig, week: str, started: float) -> dict[str, Any]:
 
 
 def forecast_next_week(app: AppConfig, week: str) -> dict[str, Any]:
-    """Prévoit N+1 via l'API (POST /predict/batch) pour que le lot suivant ferme la boucle.
-
-    Best effort : une API arrêtée ne fait pas échouer le lot (la donnée est déjà validée).
-    """
+    """POST /predict/batch sur N+1. Une API arrêtée n'échoue pas le lot."""
     from retail.api.features import next_iso_week
 
     target = next_iso_week(week)

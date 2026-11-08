@@ -1,8 +1,4 @@
-"""Point d'entrée en ligne de commande : ``retail <commande>`` (ou ``python -m retail``).
-
-Le Makefile ne fait qu'appeler ces commandes : elles fonctionnent aussi sous Windows
-sans ``make``.
-"""
+"""CLI ``retail <commande>`` (équivalent ``python -m retail``)."""
 
 from __future__ import annotations
 

@@ -1,9 +1,8 @@
 # Docker
 
-Le serveur MLflow (port **5001**) évite les chemins Windows absolus du stockage fichier
-(`mlruns/models/.../meta.yaml`). PostgreSQL (port **5437**) reçoit prédictions, feedbacks,
-runs et alertes. Prometheus (**9091**) scrape l'API hôte `:8001`. Grafana (**3001**)
-charge sources et tableau de bord depuis `monitoring/` (pas de configuration manuelle).
+MLflow (:5001) évite les chemins Windows de `mlruns/`. Postgres (:5437) stocke
+prédictions, feedbacks, runs et alertes. Prometheus (:9091) scrape l'API hôte.
+Grafana (:3001) charge `monitoring/` sans clic.
 
 ```bash
 docker compose up -d mlflow postgres prometheus grafana

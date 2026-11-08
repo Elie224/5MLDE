@@ -1,7 +1,7 @@
 # Feuille de route
 
-Principe : une **tranche verticale d'abord** (phases 0 → 4 + API minimale), puis on
-épaissit couche par couche. Chaque phase se termine par des tests et une commande qui la démontre.
+Tranche verticale d'abord (phases 0 à 4 et API minimale), puis on complète
+chaque couche. Chaque phase a des tests et une commande de démo.
 
 | # | Phase | Contenu | Preuve |
 |---|---|---|---|
@@ -16,7 +16,7 @@ Principe : une **tranche verticale d'abord** (phases 0 → 4 + API minimale), pu
 | 8 | Supervision | Prometheus + Grafana : RPS, p50/p95/p99, erreurs, version servie, WAPE réel, statut des flows | captures |
 | 9 | Charge | Locust, 3 configs (1w/0,5 vCPU, 2w/1 vCPU, 4w/2 vCPU) × rampe/plateau/pic | tableau + recommandation chiffrée |
 | 10 | Tests | unitaires, API, intégration | `make test`, CI |
-| 11 | Démo + livrables | `make demo` (3 lots : nominal, promotion, invalide), incident « MLflow/Postgres down », rollback, `SYNTHESE_OPS.md` | scénario de 10 min |
+| 11 | Démo + livrables | `retail demo` (nominal, lot invalide, Postgres down, rollback), `SYNTHESE_OPS.md` | scénario de 10 min |
 
 Ports locaux (fixés dans `.env.example`, modifiables) : Postgres 5437, MLflow 5001,
 Prefect 4201, API 8001, Grafana 3001, Prometheus 9091.

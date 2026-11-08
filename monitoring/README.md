@@ -21,5 +21,5 @@ Les compteurs RPS / latence **excluent** `/metrics` et `/health`. Avec plusieurs
 workers : `retail api --workers 2` (agrégation `PROMETHEUS_MULTIPROC_DIR` ; chaque
 processus recharge l'alias `champion` toutes les 30 s). L'API **Docker** (profil
 `load`) écrit les fichiers multiprocess dans **`/tmp/prom` (tmpfs)**, pas dans
-`./data` monté depuis Windows — sinon `/metrics` reste vide et Grafana n'affiche
+`./data` monté depuis Windows, sinon `/metrics` reste vide et Grafana n'affiche
 pas la charge.

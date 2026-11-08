@@ -122,11 +122,7 @@ def _process_cpu_seconds(pid: int) -> float | None:
 
 
 def _locust_cpu_pct(pid: int, prev: dict) -> float | None:
-    """Pourcentage d'un cœur (100 = 1 vCPU), via delta cpu_times — pas cpu_percent().
-
-    psutil.Process.cpu_percent(interval=None) reste à 0 si on recrée l'objet à chaque
-    échantillon (le précédent est stocké sur l'instance, pas sur le PID).
-    """
+    """CPU Locust via delta cpu_times (cpu_percent reste a 0 si on recree le Process)."""
     cpu = _process_cpu_seconds(pid)
     now = time.monotonic()
     if cpu is None:

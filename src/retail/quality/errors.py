@@ -1,4 +1,4 @@
-"""Erreurs de données : volontairement distinctes des pannes techniques (retry Prefect)."""
+"""Erreurs de données, distinctes des pannes techniques (pas de retry Prefect)."""
 
 
 class QualityError(RuntimeError):
