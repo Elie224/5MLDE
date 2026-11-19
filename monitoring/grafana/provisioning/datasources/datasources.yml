@@ -8,6 +8,10 @@ datasources:
     url: http://prometheus:9090
     isDefault: true
     editable: false
+    jsonData:
+      # Pas de requête aligné sur le scrape (5 s) : sinon une alerte de 10 s
+      # (RetailDbDown pendant la démo) tombe entre deux points et n'apparaît pas.
+      timeInterval: 5s
 
   - name: PostgreSQL
     uid: postgres

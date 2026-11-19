@@ -61,6 +61,7 @@ markers = ["integration: tests plus lents qui enchaînent plusieurs étapes"]
 line-length = 100
 target-version = "py311"
 src = ["src"]
+extend-exclude = ["docs/notebook"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM"]
