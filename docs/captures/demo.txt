@@ -1,0 +1,63 @@
+    curseur remis a 2011-W40
+
+=== 0. Verifications ===
+OK  /health status=ok
+OK  degraded=False
+OK  model_version=7
+OK  db_backend=postgresql (attendu postgresql)
+OK  db_ok=True
+    source=mlflow  version=7
+    MLflow http://127.0.0.1:5001 : joignable
+    chaine rollback deja en place (champion 7)
+OK  champion disque C:\Users\KOURO\Desktop\Mini proejt mlde\models\champion\meta.json
+OK  Toujours une seule version champion apres preparation du rollback.
+    previous_champion=6
+OK  Prometheus charge ['RetailApiDown', 'RetailDbDown', 'RetailDegraded', 'RetailHigh5xx'] (attendu RetailDbDown)
+
+=== 1. Nominal (rejeu N -> predire N+1 -> rejeu N+1) ===
+    curseur=2011-W40  N=2011-W40  N+1=2011-W41
+OK  /predict/batch 2011-W41 : 50 predictions
+OK  model_version=7 source=mlflow
+    rejeu 2011-W41 (feedback auto, sans train)...
+{"ts": "2026-11-10T02:45:14.634+00:00", "level": "INFO", "logger": "retail.quality.validate", "msg": "Lot validÚ", "week": "2011-W41", "rows_in": 13314, "rows_out": 11170, "panel_rows": 2057}
+{"ts": "2026-11-10T02:45:15.722+00:00", "level": "INFO", "logger": "retail.db.auto_feedback", "msg": "Feedback automatique", "week": "2011-W41", "matched": 50, "wape": 0.7046746623535111}
+{"ts": "2026-11-10T02:45:16.102+00:00", "level": "INFO", "logger": "retail.orchestration.replay", "msg": "PrÚvision N+1 enregistrÚe", "week": "2011-W42", "n": 50}
+OK  GET /model production_wape=0.7046746623535111
+    WAPE reelle=0.7047  n_skus=50
+
+=== 2. Incident lot invalide ===
+{"ts": "2026-11-10T02:45:16.176+00:00", "level": "INFO", "logger": "retail.quality.validate", "msg": "Lot invalide de dÚmo Úcrit", "path": "C:\\Users\\KOURO\\Desktop\\Mini proejt mlde\\data\\reports\\invalid_demo\\2099-W01.parquet"}
+{"ts": "2026-11-10T02:45:16.267+00:00", "level": "ERROR", "logger": "retail.quality.validate", "msg": "Lot rejetÚ", "week": "2099-W01", "error": "InvoiceSchema : 3 contr¶le(s) en Úchec (dates_dans_la_semaine, part_prix_non_positifs, volume_minimum) ; 8 ligne(s) concernÚes"}
+{"ts": "2026-11-10T02:45:16.268+00:00", "level": "INFO", "logger": "retail.quality.validate", "msg": "Lot invalide rejetÚ comme attendu (pas d'entra¯nement)", "week": "2099-W01", "report": "C:\\Users\\KOURO\\Desktop\\Mini proejt mlde\\data\\reports\\invalid_demo\\2099-W01.json"}
+OK  rapport C:\Users\KOURO\Desktop\Mini proejt mlde\data\reports\invalid_demo\2099-W01.json
+OK  status=failed
+OK  aucun rapport qualite 2099-W01 (pas d'entrainement)
+OK  GET /alerts contient le lot 2099-W01
+
+=== 3. Incident Postgres coupe ===
+OK  conteneur retail-postgres arrete
+    Grafana http://127.0.0.1:3001 : retail_db_ok et ALERTS RetailDbDown (laisser Postgres coupe > 15 s)
+OK  /predict repond toujours sans Postgres
+OK  db_ok=False (attendu false)
+    API ok  version=7  db_ok=false  RetailApiDown ne s'applique pas
+OK  Prometheus GET /api/v1/alerts : RetailDbDown firing
+OK  Postgres revenu  db_ok=True  backend=postgresql
+
+=== 4. Retour arriere ===
+{"ts": "2026-11-10T02:45:43.621+00:00", "level": "INFO", "logger": "retail.registry.promote", "msg": "Champion exportÚ", "dir": "C:\\Users\\KOURO\\Desktop\\Mini proejt mlde\\models\\champion", "version": "6"}
+{"ts": "2026-11-10T02:45:43.938+00:00", "level": "INFO", "logger": "retail.registry.promote", "msg": "Rollback champion", "from": "7", "to": "6"}
+OK  champion 7 -> 6
+OK  /health model_version=6
+    models/champion/meta.json version=6
+
+=== 5. Bilan -- ou regarder ===
+    Grafana     http://127.0.0.1:3001  (dashboard retail-mlops, WAPE, runs)
+    Prometheus  http://127.0.0.1:9091/alerts
+    MLflow      http://127.0.0.1:5001  (alias champion / challenger)
+    Prefect     http://127.0.0.1:4201  (flow weekly_lot)
+    API         GET /health  GET /model  GET /alerts  GET /metrics
+
+Demo terminee.
+{"ts": "2026-11-10T02:45:52.706+00:00", "level": "INFO", "logger": "retail.registry.promote", "msg": "Champion exportÚ", "dir": "C:\\Users\\KOURO\\Desktop\\Mini proejt mlde\\models\\champion", "version": "7"}
+{"ts": "2026-11-10T02:45:52.943+00:00", "level": "INFO", "logger": "retail.registry.promote", "msg": "Rollback champion", "from": "6", "to": "7"}
+OK  champion restaure 7

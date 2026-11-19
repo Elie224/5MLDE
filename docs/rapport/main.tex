@@ -1,0 +1,1001 @@
+% Rapport de projet 5MLDE : chaîne MLOps de prévision des ventes (UCI Online Retail)
+% Compilation : latexmk -pdf main.tex   (ou pdflatex main.tex deux fois)
+\documentclass[11pt,a4paper]{article}
+
+% ------------------------------------------------------------------ à compléter
+\newcommand{\auteur}{Nema Elisée Kourouma \\[2pt] Ju-heon Hwang \\[2pt] Ahmed Chaudhry}
+\newcommand{\auteurcourt}{Kourouma, Hwang, Chaudhry}
+\newcommand{\formation}{5MLDE -- Machine Learning \& Data Engineering}
+\newcommand{\etablissement}{Nom de l'établissement}  % <- ton école
+\newcommand{\depot}{https://github.com/Elie224/5MLDE}
+\newcommand{\datedoc}{Novembre 2026}
+
+% ------------------------------------------------------------------ paquets
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage[section]{placeins}
+
+% ------------------------------------------------------------------ style
+\definecolor{bleu}{HTML}{1F4E79}
+\definecolor{bleuclair}{HTML}{DCE6F1}
+\definecolor{vert}{HTML}{2E7D32}
+\definecolor{orange}{HTML}{E07B00}
+\definecolor{rouge}{HTML}{C62828}
+\definecolor{gris}{HTML}{5F6368}
+\definecolor{fondcode}{HTML}{F5F7FA}
+
+\titleformat{\section}{\Large\bfseries\color{bleu}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\large\bfseries\color{bleu}}{\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gris}Chaîne MLOps -- prévision des ventes}
+\fancyhead[R]{\small\color{gris}\auteurcourt}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\setlist{itemsep=2pt,topsep=4pt}
+\setlength{\parskip}{4pt}
+\setlength{\emergencystretch}{2.5em}
+\renewcommand{\arraystretch}{1.25}
+\captionsetup{font=small,labelfont={bf,color=bleu}}
+
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{fondcode},
+  frame=single, rulecolor=\color{bleuclair},
+  breaklines=true, columns=fullflexible,
+  xleftmargin=4pt, xrightmargin=4pt, aboveskip=6pt, belowskip=6pt,
+  literate={é}{{\'e}}1 {è}{{\`e}}1 {à}{{\`a}}1 {ê}{{\^e}}1 {ô}{{\^o}}1 {→}{{$\rightarrow$}}1
+}
+
+\newtcolorbox{encadre}[1][]{enhanced,breakable,colback=bleuclair!40,colframe=bleu,
+  boxrule=0.6pt,arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,fonttitle=\bfseries,#1}
+
+% Capture d'écran : insère l'image si elle existe, sinon un cadre « à insérer ».
+\newcommand{\capture}[3][0.92\linewidth]{%
+  \begin{figure}[htbp]\centering
+  \IfFileExists{../captures/#2}{\includegraphics[width=#1]{../captures/#2}}{%
+    \fcolorbox{gris}{fondcode}{\parbox[c][4.2cm][c]{0.85\linewidth}{\centering\color{gris}
+      Capture à insérer : \code{docs/captures/#2}\\[2pt]\small #3}}}%
+  \caption{#3}\label{fig:#2}
+  \end{figure}}
+
+% ================================================================== document
+\begin{document}
+
+% ------------------------------------------------------------------ titre
+\begin{titlepage}
+  \centering
+  \vspace*{1.5cm}
+  {\large\color{gris}\formation\par}
+  \vspace{0.3cm}
+  {\large\color{gris}\etablissement\par}
+  \vspace{2.2cm}
+  {\color{bleu}\rule{\linewidth}{1pt}\par}
+  \vspace{0.5cm}
+  {\Huge\bfseries\color{bleu} Une chaîne MLOps de bout en bout\par}
+  \vspace{0.4cm}
+  {\LARGE Prévision des ventes hebdomadaires par produit\par}
+  \vspace{0.3cm}
+  {\large\itshape Cas UCI Online Retail, rejoué par lots hebdomadaires\par}
+  \vspace{0.5cm}
+  {\color{bleu}\rule{\linewidth}{1pt}\par}
+  \vspace{2cm}
+  {\Large \auteur\par}
+  \vspace{0.4cm}
+  {\large Rapport de projet -- travail en équipe\par}
+  \vfill
+  \begin{tabular}{rl}
+    Dépôt & \url{\depot}\\
+    Données & UCI Online Retail -- CC BY 4.0 -- DOI 10.24432/C5BW33\\
+  \end{tabular}
+  \vspace{1cm}
+
+  {\large\datedoc\par}
+\end{titlepage}
+
+% ------------------------------------------------------------------ résumé
+\section*{Résumé}
+\addcontentsline{toc}{section}{Résumé}
+
+Un modèle d'apprentissage automatique ne crée de la valeur qu'une fois en service, et il
+ne la conserve que si l'on sait d'où viennent ses données, quelle version répond, comment
+elle se comporte et comment revenir en arrière. Ce projet construit, autour d'un cas
+métier volontairement simple, la chaîne qui apporte ces garanties.
+
+Le cas retenu est le réassort d'un commerce en ligne britannique : prévoir, pour ses 50
+produits les plus vendus, la quantité qui sera vendue la semaine suivante. Le jeu de
+données historique \emph{UCI Online Retail} est rejoué semaine par semaine afin de simuler
+l'arrivée de nouvelles ventes. Chaque lot est d'abord soumis à des contrôles de qualité
+\textbf{bloquants} ; il alimente ensuite un entraînement dont le résultat n'est mis en
+service que s'il fait au moins aussi bien que le modèle en place sur les mêmes semaines de
+test. L'enchaînement est automatisé par Prefect, les modèles sont tracés et versionnés dans
+MLflow, servis par une API FastAPI qui indique toujours la version qui répond, et toutes
+les prédictions, erreurs et ventes réelles sont conservées dans PostgreSQL. Prometheus et
+Grafana assurent la supervision.
+
+La chaîne a été démontrée de bout en bout : sept versions du modèle ont été produites et
+promues automatiquement, un lot invalide a été arrêté avant tout entraînement, une coupure
+de la base a été absorbée sans interrompre le service et a déclenché l'alerte prévue, et un
+retour arrière a été effectué en une commande. Les tests de charge conduisent à une
+recommandation chiffrée : une unité de \textbf{2 workers, 1 vCPU et 1 Go} sert
+\textbf{55,8 requêtes par seconde} avec une latence p95 de 110 ms et aucune erreur.
+
+\vspace{0.3cm}
+\noindent\textbf{Mots-clés :} MLOps, qualité des données, traçabilité, registre de modèles,
+orchestration, supervision, dimensionnement.
+
+\newpage
+\tableofcontents
+\newpage
+
+% ================================================================== 1
+\section{Introduction}
+
+\subsection{Contexte}
+
+Un commerçant en ligne doit commander ses produits avant de les vendre. S'il commande trop,
+il immobilise de la trésorerie et de l'espace ; s'il commande trop peu, il perd des ventes.
+Une prévision de la quantité vendue la semaine suivante, produit par produit, éclaire
+directement cette décision de réassort. Le périmètre retenu est volontairement étroit : les
+\textbf{50 produits} qui concentrent l'essentiel des volumes, le marché du
+\textbf{Royaume-Uni}, majoritaire dans les données, et un horizon d'\textbf{une semaine ISO}.
+
+\subsection{Problématique}
+
+Entraîner un modèle de prévision une fois, dans un notebook, est simple. Le difficile
+commence lorsque ce modèle doit vivre : de nouvelles données arrivent chaque semaine et
+peuvent être erronées, un nouveau modèle peut être moins bon que l'ancien, un service peut
+tomber, et il faut pouvoir expliquer après coup quelle version a produit quelle prévision.
+La question posée par ce projet est donc la suivante :
+
+\begin{encadre}[title=Problématique]
+Comment faire tourner un modèle de prévision réentraîné chaque semaine de façon
+\textbf{fiable} (des données contrôlées, des incidents absorbés), \textbf{traçable} (chaque
+prévision rattachée à une version, chaque version à ses données) et
+\textbf{exploitable} (un service mesuré, supervisé et dimensionné) ?
+\end{encadre}
+
+Le cahier des charges précise que ni la performance ni la complexité du modèle ne sont
+évaluées. Le modèle est donc volontairement simple : il n'est qu'un passager, et l'essentiel
+du travail porte sur la chaîne qui le fabrique, le contrôle, le met en service, le surveille
+et permet de revenir en arrière.
+
+\subsection{Démarche et plan}
+
+Le projet a été construit par couches successives, chacune vérifiée avant de passer à la
+suivante : données et qualité, entraînement et registre, orchestration, service,
+persistance, supervision, puis tests de charge et démonstration. Les incidents rencontrés
+en cours de route ont été traités comme des résultats à part entière : chacun a donné lieu à
+une correction et, le plus souvent, à un indicateur qui permet de le détecter.
+
+Le rapport suit cette progression. La section~\ref{sec:donnees} présente les données et leur
+rejeu, la section~\ref{sec:archi} l'architecture et les choix techniques. Les sections
+\ref{sec:code} à \ref{sec:supervision} décrivent chaque brique de la chaîne, la
+section~\ref{sec:charge} les tests de charge et le dimensionnement, et la
+section~\ref{sec:demo} la démonstration de bout en bout. La section~\ref{sec:bilan} croise
+les critères d'évaluation avec les preuves apportées, avant les limites et la conclusion.
+
+% ================================================================== 2
+\section{Les données}\label{sec:donnees}
+
+\subsection{Provenance et conditions d'utilisation}
+
+Le jeu de données \emph{Online Retail} rassemble les transactions d'un commerce en ligne
+britannique d'articles cadeaux. Il est publié par le dépôt de l'Université de Californie à
+Irvine sous une licence ouverte qui autorise la réutilisation à condition de citer la
+source (tableau~\ref{tab:fiche}).
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{>{\bfseries}l X}
+\toprule
+Jeu de données & \emph{Online Retail}, UCI Machine Learning Repository\\
+Page & \url{https://archive.ics.uci.edu/dataset/352/online+retail}\\
+DOI & 10.24432/C5BW33\\
+Licence & Creative Commons Attribution 4.0 (CC BY 4.0) : réutilisation et modification
+autorisées, y compris commerciales, sous réserve de citer la source\\
+Producteur & Daqing Chen, London South Bank University\\
+Contenu & 541\,909 lignes de facture, du 01/12/2010 au 09/12/2011\\
+\bottomrule
+\end{tabularx}
+\caption{Fiche d'identité du jeu de données.}\label{tab:fiche}
+\end{table}
+
+Chaque ligne décrit un article d'une facture : numéro de facture (préfixé par \code{C} pour
+une annulation), code et libellé du produit, quantité (négative pour un retour), date, prix
+unitaire en livres sterling, identifiant client et pays. La seule information relative aux
+personnes est \code{CustomerID}, un identifiant numérique déjà pseudonymisé à la source ;
+il n'entre pas dans le modèle, puisque la prévision est agrégée par produit, et n'est jamais
+exposé par l'API.
+
+Les données ne sont pas versionnées dans Git, à la fois pour leur taille et pour respecter
+leur mode de diffusion. La commande \code{retail data} les télécharge, vérifie l'empreinte
+SHA256 de l'archive, figée dans \code{configs/data.yaml}, et refuse toute archive
+différente : deux personnes qui reproduisent le projet travaillent donc nécessairement sur
+les mêmes octets.
+
+\subsection{Simuler l'arrivée de nouvelles données}
+
+Le jeu de données est historique, alors qu'une chaîne opérationnelle doit absorber des
+données qui arrivent au fil de l'eau. Il est donc \textbf{rejoué par lots hebdomadaires} :
+chaque lot regroupe les factures d'une semaine ISO, du lundi au dimanche, et l'orchestrateur
+le « livre » comme si la semaine venait de se terminer. Les première et dernière semaines,
+incomplètes, sont écartées ; il reste \textbf{51 lots}, de \code{2010-W49} à
+\code{2011-W48}. La semaine \code{2010-W52}, sans ventes en raison de la fermeture de Noël,
+est enregistrée comme manquante dans le manifeste plutôt que masquée, et chaque lot y porte
+une empreinte de son contenu.
+
+Ce rejeu a une conséquence utile : le lot de la semaine N+1 apporte les ventes réelles de la
+semaine prévue lors du lot N. C'est ce qui permet de mesurer l'erreur du modèle \emph{en
+production}, et non seulement à l'entraînement (section~\ref{sec:persistance}).
+
+Une précaution évite enfin toute fuite d'information du futur vers le passé : la liste des
+50 produits suivis est calculée sur les 8 premières semaines seulement, puis figée.
+
+% ================================================================== 3
+\section{Architecture et choix techniques}\label{sec:archi}
+
+\subsection{Vue d'ensemble}
+
+La figure~\ref{fig:archi} montre la circulation des données et des artefacts. Le flux
+principal se lit de gauche à droite : un lot est contrôlé, transformé en variables, sert à
+entraîner un modèle qui est enregistré, puis, s'il est retenu, servi par l'API. Les traces
+d'usage reviennent vers la base de données, et la supervision observe l'ensemble.
+
+\begin{figure}[htbp]\centering
+\begin{tikzpicture}[
+  font=\small,
+  bloc/.style={draw=bleu,fill=bleuclair,rounded corners=3pt,minimum width=2.25cm,
+               minimum height=0.95cm,align=center,line width=0.6pt},
+  stock/.style={draw=gris,fill=fondcode,cylinder,shape border rotate=90,aspect=0.18,
+               minimum width=2.2cm,minimum height=1.05cm,align=center},
+  ext/.style={draw=orange,fill=orange!10,rounded corners=3pt,minimum width=2.1cm,
+               minimum height=0.9cm,align=center},
+  fl/.style={-{Stealth[length=2.4mm]},line width=0.7pt,color=bleu},
+  fb/.style={-{Stealth[length=2.2mm]},line width=0.6pt,color=vert,dashed},
+  node distance=0.55cm and 0.5cm]
+
+  \node[stock] (uci) {Archive UCI\\\scriptsize SHA256 figé};
+  \node[bloc,right=of uci] (lots) {Lots ISO\\\scriptsize 51 semaines};
+  \node[bloc,right=of lots] (qual) {Qualité\\\scriptsize Pandera};
+  \node[bloc,right=of qual] (feat) {Features\\\scriptsize lags, moyenne};
+  \node[bloc,right=of feat] (train) {Entraînement\\\scriptsize Ridge vs naïf};
+
+  \node[stock,below=1.3cm of train] (mlf) {MLflow\\\scriptsize registre :5001};
+  \node[bloc,left=1.1cm of mlf] (champ) {Champion\\\scriptsize export disque};
+  \node[bloc,left=1.1cm of champ] (api) {API FastAPI\\\scriptsize :8001};
+  \node[stock,left=1.1cm of api] (pg) {PostgreSQL\\\scriptsize :5437};
+
+  \node[ext,below=1.25cm of api] (prom) {Prometheus\\\scriptsize :9091};
+  \node[ext,left=of prom] (graf) {Grafana\\\scriptsize :3001};
+  \node[ext,right=of prom] (loc) {Locust\\\scriptsize charge};
+
+  \begin{scope}[on background layer]
+    \node[draw=bleu!60,dashed,rounded corners=5pt,fit=(lots)(train),inner sep=7pt,
+          label={[font=\scriptsize\bfseries,text=bleu,anchor=south east]north east:Prefect : un lot par tick}] {};
+  \end{scope}
+
+  \draw[fl] (uci) -- (lots);
+  \draw[fl] (lots) -- (qual);
+  \draw[fl] (qual) -- node[above,font=\scriptsize]{OK} (feat);
+  \draw[fl] (feat) -- (train);
+  \draw[fl] (train) -- node[right,font=\scriptsize]{enregistre} (mlf);
+  \draw[fl] (mlf) -- node[above,font=\scriptsize]{promeut} (champ);
+  \draw[fl] (champ) -- node[above,font=\scriptsize]{sert} (api);
+  \draw[fl] (api) -- node[above,font=\scriptsize]{traces} (pg);
+  \draw[fb] (qual.south) |- ++(0,-0.55) -| node[pos=0.25,above,font=\scriptsize,text=vert]{feedback auto} (pg.north);
+  \draw[fl,color=rouge] (qual.north) -- ++(0,0.85) node[above,font=\scriptsize,text=rouge]{KO : arrêt + alerte};
+  \draw[fl,color=orange] (prom) -- node[left,font=\scriptsize]{/metrics} (api);
+  \draw[fl,color=orange] (graf) -- (prom);
+  \draw[fl,color=orange] (graf.north) -- (pg.south);
+  \draw[fl,color=orange] (loc) -- (api.south east);
+\end{tikzpicture}
+\caption{Architecture et circulation des données et des artefacts.}\label{fig:archi}
+\end{figure}
+
+Trois principes ont guidé la conception. D'abord, \textbf{un seul point d'entrée} : toutes
+les opérations passent par la commande \code{retail}, ce qui rend chaque étape scriptable,
+testable et reproductible sans notebook. Ensuite, \textbf{arrêter plutôt que propager} :
+une donnée non conforme stoppe la chaîne au lieu de produire un modèle faux. Enfin,
+\textbf{le service avant la trace} : une panne de la base ou du registre dégrade la
+traçabilité, mais ne doit jamais interrompre les prédictions.
+
+\subsection{Choix techniques}
+
+Les outils ont été choisis pour leur adéquation à une exécution locale, gratuite et
+reproductible, et pour la clarté de ce qu'ils permettent de démontrer. Le
+tableau~\ref{tab:choix} résume chaque choix, sa justification et l'alternative écartée.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{>{\bfseries}l l X X}
+\toprule
+Besoin & Choix & Justification & Alternative écartée\\
+\midrule
+Configuration & YAML + \code{.env} & règles métier relues en revue de code ; secrets hors Git & variables codées en dur\\
+Qualité & Pandera & schémas déclaratifs en Python, contrôles nommés, rapport par lot & Great Expectations, plus lourd à configurer pour ce volume\\
+Modèle & Ridge & simple, rapide (quelques secondes), comparable à une prévision naïve & modèles d'arbres, sans intérêt ici puisque le score n'est pas évalué\\
+Registre & MLflow & runs, versions, alias \code{champion}/\code{challenger}, tags & simple dossier de fichiers, sans historique ni décision tracée\\
+Orchestration & Prefect & flux en Python, relances conditionnelles, planification, interface & Airflow, plus lourd à déployer en local\\
+Service & FastAPI & validation des entrées par Pydantic, documentation automatique & Flask, sans validation native\\
+Traces & PostgreSQL & partagé par l'API, le pipeline et Grafana, robuste en écriture concurrente & SQLite, inadapté à plusieurs processus\\
+Supervision & Prometheus + Grafana & standard, alertes déclaratives, tableau de bord versionné & journaux seuls, sans seuil ni alerte\\
+Charge & Locust + Docker & scénarios en Python, mêmes paliers sur plusieurs limites CPU et mémoire & tests manuels non reproductibles\\
+\bottomrule
+\end{tabularx}
+\caption{Choix techniques, justification et alternative écartée.}\label{tab:choix}
+\end{table}
+
+\paragraph{Déploiement local.} Les services d'infrastructure (PostgreSQL, MLflow,
+Prometheus, Grafana) tournent dans Docker Compose ; l'API et le pipeline tournent sur le
+poste. Les ports sont fixés dans \code{.env.example} : PostgreSQL 5437, MLflow 5001,
+Prefect 4201, API 8001, Grafana 3001 et Prometheus 9091.
+
+% ================================================================== 4
+\section{Code et reproductibilité}\label{sec:code}
+
+\subsection{Organisation du code}
+
+Le code forme un paquet Python installable, \code{retail}, découpé par responsabilité
+(tableau~\ref{tab:modules}). Chaque module peut être testé isolément, et les dépendances
+entre modules suivent le sens du flux : la qualité ne connaît pas l'API, l'API ne connaît pas
+l'entraînement.
+
+\begin{table}[htbp]\centering\small
+\begin{tabular}{ll}
+\toprule
+Module & Responsabilité\\
+\midrule
+\code{common/} & configuration (Pydantic), journalisation JSON, adresse MLflow\\
+\code{data/} & téléchargement, vérification d'empreinte, découpage en lots\\
+\code{quality/} & schémas Pandera, nettoyage tracé, validation bloquante\\
+\code{features/} & construction du panel et des variables\\
+\code{training/} & entraînement, métriques, comparaison au naïf\\
+\code{registry/} & enregistrement, promotion, retour arrière, export\\
+\code{orchestration/} & curseur de rejeu, exécutions, alertes, verrou\\
+\code{api/} & service FastAPI, état du modèle servi, cache des variables\\
+\code{db/} & tables SQLAlchemy, écriture en file, feedback automatique\\
+\bottomrule
+\end{tabular}
+\caption{Modules du paquet \code{retail}.}\label{tab:modules}
+\end{table}
+
+\subsection{Configuration, dépendances et tests}
+
+La configuration est séparée en deux sources. Les fichiers \code{configs/config.yaml} et
+\code{configs/data.yaml}, versionnés, contiennent tout ce qui relève du métier : seuils de
+qualité, paramètres d'entraînement, règle de promotion, source des données et son
+empreinte. Le fichier \code{.env}, jamais versionné, contient les adresses et identifiants
+des services ; un modèle \code{.env.example} sans secret l'accompagne. L'ensemble est validé
+au démarrage par Pydantic : une valeur hors bornes arrête la commande avant tout traitement,
+plutôt qu'au milieu d'un entraînement.
+
+Les dépendances sont maîtrisées à deux niveaux : des bornes de compatibilité dans
+\code{pyproject.toml}, et des versions exactes verrouillées dans \code{requirements.lock}
+pour Python 3.11 à 3.13. La qualité du code est contrôlée par \code{ruff} (règles et
+formatage), et 18 fichiers de tests unitaires et d'intégration couvrent la configuration,
+l'ingestion, la qualité, l'entraînement, le registre, l'orchestration, l'API, la base, la
+supervision, la démonstration et les tests de charge. Une intégration continue GitHub
+Actions rejoue le lint et les tests sur trois versions de Python.
+
+\subsection{Vérification depuis un clone neuf}
+
+Une installation qui ne fonctionne que sur le poste de son auteur n'est pas reproductible.
+Le dépôt a donc été cloné depuis GitHub dans un environnement vide, puis installé et
+exécuté pas à pas, comme le ferait un correcteur (tableau~\ref{tab:clone}). Cette
+vérification a d'ailleurs révélé un défaut réel, corrigé depuis : une règle trop large du
+\code{.gitignore} excluait le dossier \code{src/retail/data/}, si bien que le dépôt publié ne
+démarrait pas.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{X l}
+\toprule
+Étape & Résultat\\
+\midrule
+Installation (\code{requirements.lock}, puis \code{pip install -e .}) & réussie\\
+\code{ruff check} et \code{ruff format --check} & aucune erreur, 66 fichiers conformes\\
+\code{retail check-config} & configuration valide\\
+\code{pytest} & \textbf{131 tests réussis}\\
+\code{retail data} & empreinte vérifiée, 51 lots produits\\
+\code{retail quality}, puis lot invalide de démonstration & lots valides acceptés, lot invalide rejeté\\
+\code{retail train}, \code{retail replay}, \code{retail rollback} & chaîne complète exécutée\\
+API : \code{/health}, \code{/predict/batch} & modèle servi, 50 prédictions, version renvoyée\\
+\bottomrule
+\end{tabularx}
+\caption{Rejeu de la chaîne depuis un clone neuf du dépôt.}\label{tab:clone}
+\end{table}
+
+% ================================================================== 5
+\section{Qualité des données}\label{sec:qualite}
+
+\subsection{Des contrôles qui bloquent}
+
+Un modèle entraîné sur des données fausses produit des prévisions fausses, et rien dans ses
+métriques ne le signale nécessairement. La qualité est donc contrôlée \emph{avant} tout
+prétraitement, et un lot non conforme arrête la chaîne. Chaque lot traverse trois étapes :
+
+\begin{enumerate}
+  \item le \textbf{schéma des factures} vérifie les colonnes et leurs types, que toutes les
+        dates tombent dans la semaine ISO du lot, que le lot compte au moins 500 lignes et
+        que moins de 5\,\% des prix sont nuls ou négatifs ;
+  \item le \textbf{nettoyage} écarte les ventes hors Royaume-Uni, les annulations, les
+        quantités ou prix nuls, les codes qui ne sont pas des produits (frais de port,
+        remises\ldots) et les valeurs aberrantes ; chaque ligne écartée est comptée et
+        justifiée dans un rapport JSON, ce qui rend le nettoyage auditable ;
+  \item le \textbf{schéma du panel} vérifie le résultat agrégé : une ligne par produit et par
+        semaine, des quantités positives ou nulles, aucun doublon.
+\end{enumerate}
+
+Si l'une de ces étapes échoue, aucun panel n'est écrit, l'entraînement n'est pas lancé, une
+alerte est émise et le curseur du rejeu reste bloqué sur la semaine fautive jusqu'à
+correction.
+
+\subsection{Distinguer erreur de données et panne technique}
+
+Une erreur de données et une panne technique n'appellent pas la même réponse. Une base
+momentanément injoignable se résout souvent d'elle-même : il est raisonnable de réessayer.
+Un lot invalide, lui, le restera : le réessayer ne ferait que retarder l'alerte. Les deux
+cas sont donc représentés par des exceptions distinctes, et l'orchestrateur ne relance
+automatiquement que les pannes techniques (section~\ref{sec:orchestration}).
+
+\subsection{Mise à l'épreuve}
+
+La commande \code{retail quality --invalid-demo} fabrique un lot volontairement corrompu,
+\code{2099-W01}. Lors de la démonstration, il a été rejeté par trois contrôles
+(dates hors de la semaine, part de prix non positifs, volume minimum), aucun entraînement
+n'a été lancé, et l'alerte correspondante a été reçue par l'API.
+
+% ================================================================== 6
+\section{Modèle et entraînement}\label{sec:modele}
+
+Les ventes sont agrégées en un panel « produit $\times$ semaine », complété par des zéros
+pour les semaines sans vente. Le modèle s'appuie sur les ventes des 1\textsuperscript{re},
+2\textsuperscript{e} et 4\textsuperscript{e} semaines précédentes et leur moyenne mobile sur
+quatre semaines, sur le prix moyen de la semaine précédente, sur la semaine de l'année et le
+mois pour la saisonnalité, et sur le code produit. Le prix est pris à la semaine
+\emph{précédente} : utiliser celui de la semaine prévue reviendrait à exploiter une
+information inconnue au moment de la prévision.
+
+L'évaluation respecte l'ordre du temps : les 8 dernières semaines disponibles forment le jeu
+de test et ne sont jamais utilisées pour apprendre. Le modèle, une régression Ridge, est
+comparé à une \textbf{prévision naïve} qui reconduit les ventes de la semaine précédente.
+Deux métriques sont suivies : la \textbf{MAE}, erreur absolue moyenne en unités vendues, qui
+sert aux décisions, et la \textbf{WAPE}, erreur rapportée au volume vendu, plus parlante pour
+le métier.
+
+Ce choix d'un modèle linéaire est délibéré. La performance n'étant pas évaluée, un modèle
+plus complexe n'apporterait rien à la démonstration ; en revanche, un entraînement de
+quelques secondes rend possible un rejeu automatique toutes les dix minutes.
+
+% ================================================================== 7
+\section{Traçabilité et cycle de vie des modèles}\label{sec:registre}
+
+\subsection{Tracer pour pouvoir expliquer}
+
+Chaque entraînement crée un run MLflow qui conserve tout ce qu'il faut pour l'expliquer ou
+le reproduire : la dernière semaine utilisée (\code{until_week}) et les semaines de test,
+une empreinte des variables (\code{features_hash}) et de l'archive source
+(\code{data_hash}), les paramètres, les métriques du modèle et de la prévision naïve, et les
+artefacts, c'est-à-dire le modèle avec sa signature et la liste figée des produits.
+
+\subsection{Une règle de mise en service explicite}
+
+Un nouveau modèle n'est pas automatiquement meilleur que l'ancien. La règle de mise en
+service, écrite dans la configuration, procède en deux temps. Un run n'est
+\textbf{enregistré} comme version candidate (alias \code{challenger}) que s'il bat la
+prévision naïve. Il n'est ensuite \textbf{promu} champion que si sa MAE est inférieure ou
+égale à celle du champion en place, \textbf{mesurée sur le même jeu de test}. Ce dernier
+point est essentiel : deux modèles évalués sur des semaines différentes ne sont pas
+comparables, puisque certaines semaines sont intrinsèquement plus difficiles à prévoir.
+
+La décision est écrite en tag sur chaque version, ce qui permet de la relire après coup.
+Pour la version 7, par exemple :
+\begin{lstlisting}
+decision : promoted: mae 242.9378 <= champion 6 mae 243.0059 on same test
+previous_champion : 6
+\end{lstlisting}
+
+Un garde-fou complète la règle : si une semaine déjà entraînée est rejouée, aucune nouvelle
+version n'est créée. Sans lui, un ré-entraînement sur les mêmes données produisait une copie
+identique du modèle, promue grâce au « inférieur ou égal », ce qui brouillait l'historique.
+
+\subsection{Servir sans dépendre du registre}
+
+À chaque promotion, le champion est exporté de façon atomique dans
+\code{models/champion/}, avec une copie de secours. Si le registre MLflow devient
+injoignable, l'API continue de servir ce champion local et le signale comme \textbf{mode
+dégradé}, dans \code{/health} comme dans les métriques.
+
+\subsection{Revenir en arrière}
+
+Si une version promue se révèle décevante en production, la commande \code{retail rollback}
+remet en service la version indiquée par son tag \code{previous_champion}, ou une version
+choisie avec \code{--to-version}. Le champion est réexporté à chaque fois, et les retours
+arrière peuvent s'enchaîner. La démonstration l'a vérifié en conditions réelles : passage de
+la version 7 à la version 6, puis restauration de la 7.
+
+% ================================================================== 8
+\section{Orchestration}\label{sec:orchestration}
+
+\subsection{Le flux hebdomadaire}
+
+Le flux Prefect \code{weekly_lot} traite \textbf{un lot par exécution}. Il est déclenché
+automatiquement toutes les dix minutes, chaque exécution représentant une semaine simulée,
+et une seule exécution peut tourner à la fois. Chaque exécution choisit la semaine suivante
+à partir du curseur de rejeu, valide le lot, rapproche les ventes réelles des prédictions
+faites pour cette semaine, entraîne puis enregistre éventuellement un nouveau modèle, et
+demande enfin à l'API la prévision de la semaine suivante, qui sera comparée aux ventes
+réelles au lot suivant. La boucle se ferme ainsi d'elle-même.
+
+\subsection{Gestion des échecs}
+
+L'enjeu de l'orchestration n'est pas l'enchaînement nominal, simple, mais le comportement
+face aux échecs (tableau~\ref{tab:echecs}).
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{l X}
+\toprule
+Situation & Comportement\\
+\midrule
+Lot non conforme & arrêt, alerte, curseur bloqué sur la semaine, aucune relance\\
+Panne technique pendant l'entraînement & 2 relances espacées de 10 s, puis alerte\\
+Interruption au milieu d'un enregistrement & reprise de la version restée « en cours », sans ré-entraîner\\
+Tous les lots déjà rejoués & exécution terminée normalement, sans alerte\\
+API arrêtée au moment de la prévision & le lot reste validé ; l'échec de la prévision est noté\\
+Rejeu manuel d'une semaine passée & le curseur ne recule pas\\
+\bottomrule
+\end{tabularx}
+\caption{Comportement de l'orchestration face aux échecs.}\label{tab:echecs}
+\end{table}
+
+\subsection{Suivi des exécutions}
+
+Chaque exécution est enregistrée dans un journal (\code{runs.jsonl}) et dans la table
+\code{pipeline_runs}, avec la semaine, le statut, la durée, la version et l'éventuelle
+erreur ; Prefect conserve en parallèle l'historique détaillé de chaque tâche. Les alertes
+sont envoyées à l'API, qui les stocke ; une copie locale est écrite si l'envoi échoue. Un
+verrou de fichier empêche enfin deux rejeux simultanés de se marcher dessus.
+
+% ================================================================== 9
+\section{API de prédiction}\label{sec:api}
+
+L'API expose les prédictions en ligne et par lot, ainsi que l'état du service
+(tableau~\ref{tab:routes}).
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{l l X}
+\toprule
+Méthode & Route & Rôle\\
+\midrule
+POST & \code{/predict} & prédiction pour un produit et une semaine\\
+POST & \code{/predict/batch} & prédictions pour les 50 produits d'une semaine\\
+POST & \code{/predict/features} & prédiction à partir de variables fournies\\
+POST & \code{/feedback} & retour terrain (quantité réelle) sur une prédiction\\
+GET & \code{/health} & état complet : version, source, mode dégradé, base\\
+GET & \code{/health/live} & vivacité, sans appel aux dépendances\\
+GET & \code{/model} & version servie, produits, WAPE de production\\
+POST & \code{/model/reload} & rechargement du champion\\
+GET/POST & \code{/alerts} & réception et consultation des alertes du pipeline\\
+GET & \code{/metrics} & métriques Prometheus\\
+\bottomrule
+\end{tabularx}
+\caption{Routes de l'API.}\label{tab:routes}
+\end{table}
+
+Les entrées sont validées par Pydantic avant tout calcul : format de semaine
+\code{AAAA-Www}, champs obligatoires, et horizon limité à la semaine qui suit la dernière
+semaine connue, puisqu'au-delà les variables ne peuvent pas être calculées. Les erreurs sont
+explicites : \textbf{404} pour un produit inconnu ou une prédiction introuvable,
+\textbf{422} pour une entrée invalide ou hors horizon.
+
+Chaque réponse identifie la version du modèle qui l'a produite, dans le corps
+(\code{model_version}) et dans l'en-tête \code{X-Model-Version}, et porte un identifiant
+unique de prédiction qui sert à rattacher le retour terrain. Le modèle servi est remplacé de
+façon atomique : une requête en cours ne voit jamais un état à moitié mis à jour. Chaque
+worker vérifie toutes les 30 secondes si le champion a changé.
+
+% ================================================================== 10
+\section{Persistance et retours terrain}\label{sec:persistance}
+
+\subsection{Conserver les traces d'usage}
+
+Quatre tables PostgreSQL conservent l'activité : les \textbf{prédictions} (produit,
+semaine, quantité prédite, version, durée, statut et erreur éventuelle), les
+\textbf{feedbacks} (quantité réelle, quantité prédite, erreur, version, origine), les
+\textbf{exécutions du pipeline} et les \textbf{alertes}.
+
+L'écriture des prédictions suit le principe « le service avant la trace » : elles passent
+par une file bornée vidée en arrière-plan, par lots. Si la base est lente ou coupée, l'API
+continue de répondre, et les écritures perdues sont \emph{comptées} par une métrique au lieu
+de disparaître en silence. Les exécutions et alertes du pipeline, peu nombreuses, sont
+écrites directement. Le trafic des tests de charge, enfin, est marqué par un en-tête dédié
+et exclu des retours terrain, pour ne pas fausser les indicateurs de production.
+
+\subsection{Mesurer l'erreur en production}
+
+Quand le lot d'une semaine est validé, ses ventes réelles ferment automatiquement les
+prédictions faites pour cette semaine. On obtient ainsi une \textbf{WAPE de production par
+version}, visible dans \code{/model} et dans Grafana. Elle complète utilement la MAE
+d'entraînement : la première dit comment le modèle s'est comporté sur les semaines de test,
+la seconde comment il se comporte réellement une fois en service. Sur les semaines rejouées,
+elle se situe entre 62\,\% et 71\,\% selon la version, un niveau cohérent avec la simplicité
+du modèle et la volatilité des ventes hebdomadaires de produits cadeaux. L'API accepte aussi
+des retours saisis manuellement, rattachés à la prédiction d'origine.
+
+% ================================================================== 11
+\section{Supervision}\label{sec:supervision}
+
+\subsection{Le tableau de bord}
+
+Le tableau de bord Grafana \code{retail-mlops} est provisionné automatiquement : il fait
+partie du dépôt et s'installe avec les services. Il répond à quatre questions d'exploitation.
+\emph{Le service est-il utilisé ?} : requêtes par seconde et version servie.
+\emph{Répond-il assez vite ?} : latences p50, p95 et p99, avec un seuil à 200 ms.
+\emph{Est-il en bonne santé ?} : taux d'erreurs 4xx et 5xx, mode dégradé, état de la base,
+écritures abandonnées et frise des alertes. \emph{Le modèle et le pipeline se
+comportent-ils bien ?} : exécutions du pipeline, alertes du pipeline, WAPE de production par
+version et par semaine, volumes de traces.
+
+La figure~\ref{fig:grafana.png} montre ce tableau de bord pendant la démonstration : la
+coupure volontaire de PostgreSQL y est visible sous trois angles, par les écritures
+abandonnées, par l'alerte qui passe d'« en attente » à « déclenchée », et par l'absence
+d'erreurs 5xx, preuve que le service a continué de répondre.
+
+\capture[0.97\linewidth]{grafana.png}{Tableau de bord Grafana sur la fenêtre de la démonstration (10 novembre 2026, 03:40--03:50). Pendant la coupure volontaire de PostgreSQL vers 03:45, les écritures abandonnées montent et l'alerte \code{RetailDbDown} passe d'« en attente » à « déclenchée ». En dessous : WAPE de production par version et par semaine, exécutions du pipeline (durée, version), alertes du pipeline et volumes de traces.}
+
+\subsection{Les alertes}
+
+Quatre règles Prometheus couvrent les situations qui exigent une intervention
+(tableau~\ref{tab:alertes}). Leurs délais sont choisis pour ignorer un incident fugace tout
+en signalant rapidement un problème durable.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{l l X}
+\toprule
+Alerte & Condition & Signification\\
+\midrule
+\code{RetailDegraded} & mode dégradé pendant 1 min & le registre est injoignable, le champion local est servi\\
+\code{RetailHigh5xx} & plus de 5\,\% de 5xx pendant 1 min & le service renvoie des erreurs\\
+\code{RetailApiDown} & métriques injoignables pendant 30 s & l'API est arrêtée\\
+\code{RetailDbDown} & base injoignable pendant 15 s & les traces ne sont plus écrites\\
+\bottomrule
+\end{tabularx}
+\caption{Règles d'alerte Prometheus.}\label{tab:alertes}
+\end{table}
+
+% ================================================================== 12
+\section{Tests de charge et dimensionnement}\label{sec:charge}
+
+\subsection{Protocole}
+
+L'objectif est de répondre à une question concrète : combien de ressources faut-il pour
+tenir une charge donnée avec une latence acceptable ? Le protocole, piloté par
+\code{load_tests/run.py}, simule avec Locust un usage réaliste : 70\,\% de prédictions
+unitaires, 20\,\% de prédictions par lot et 10\,\% de sondes de santé. La charge monte par
+paliers de 2, 5, 10, 20, 40, 80, 160 puis 320 utilisateurs simultanés, chacun pendant
+45 secondes. Trois configurations sont comparées, chacune dans un conteneur limité en CPU et
+en mémoire : 1 worker sur 0,5 vCPU, 2 workers sur 1 vCPU, 4 workers sur 2 vCPU. La
+\textbf{capacité} d'une configuration est définie comme le dernier palier où la latence p95
+reste sous 200 ms sans aucune erreur.
+
+\subsection{Une première série qui a révélé deux défauts}
+
+La première série de mesures n'atteignait le critère dans aucune configuration : le débit
+plafonnait entre 9,5 et 38,8 requêtes par seconde, avec un p95 toujours au-delà d'une
+seconde. Son analyse a mis au jour deux défauts. À chaque requête, l'API relisait la liste
+des fichiers du panel sur un dossier monté depuis Windows, ce qui coûtait environ 400 ms. Et
+79\,\% des traces de prédiction étaient perdues sous charge alors que le compteur d'abandons
+restait à zéro : la perte était silencieuse. Après correction (lecture mise en cache 5 s,
+insertion SQL par lot, compteur réparé), le débit maximal a été multiplié par 2 à 3,4 et
+pratiquement toutes les traces sont enregistrées. Cet épisode illustre l'intérêt d'un
+protocole de charge : il a fait apparaître un problème de traçabilité qu'aucun test
+fonctionnel n'aurait détecté.
+
+\subsection{Résultats}
+
+\begin{figure}[htbp]\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.49\linewidth, height=6cm,
+  xmode=log, log basis x=2, xtick={2,5,10,20,40,80,160,320},
+  xticklabels={2,5,10,20,40,80,160,320},
+  xlabel={Utilisateurs simultanés}, ylabel={Débit (req/s)},
+  ymin=0, ymax=90, ytick={0,20,40,60,80}, grid=major, grid style={gray!25},
+  legend style={font=\scriptsize,at={(0.5,1.03)},anchor=south,legend columns=2,draw=none,fill=none},
+  mark size=1.6pt, thick]
+\addplot[color=orange,mark=*] coordinates {(2,12.4)(5,29.8)(10,32.4)(20,29.3)(40,23.4)(80,21.7)(160,22.3)(320,21.5)};
+\addplot[color=bleu,mark=square*] coordinates {(2,12.9)(5,31.0)(10,55.8)(20,49.9)(40,40.0)(80,33.3)(160,33.5)(320,34.7)};
+\addplot[color=vert,mark=triangle*] coordinates {(2,12.3)(5,31.3)(10,60.2)(20,81.6)(40,77.0)(80,80.8)(160,68.4)(320,58.0)};
+\legend{{1w / 0,5 vCPU},{2w / 1 vCPU},{4w / 2 vCPU}}
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.49\linewidth, height=6cm,
+  xmode=log, log basis x=2, xtick={2,5,10,20,40,80,160,320},
+  xticklabels={2,5,10,20,40,80,160,320},
+  ymode=log, xlabel={Utilisateurs simultanés}, ylabel={p95 (ms)},
+  grid=major, grid style={gray!25},
+  legend style={font=\scriptsize,at={(0.5,1.03)},anchor=south,legend columns=2,draw=none,fill=none},
+  mark size=1.6pt, thick]
+\addplot[color=orange,mark=*] coordinates {(2,51)(5,120)(10,310)(20,1500)(40,3800)(80,6000)(160,6800)(320,17000)};
+\addplot[color=bleu,mark=square*] coordinates {(2,27)(5,49)(10,110)(20,720)(40,1900)(80,4100)(160,9800)(320,16000)};
+\addplot[color=vert,mark=triangle*] coordinates {(2,34)(5,49)(10,60)(20,360)(40,1200)(80,2100)(160,4900)(320,11000)};
+\addplot[color=rouge,dashed,domain=2:320,samples=2] {200};
+\legend{1w, 2w, 4w, seuil 200 ms}
+\end{axis}
+\end{tikzpicture}
+\caption{Débit (à gauche) et latence p95 (à droite) par palier, après optimisation
+(échelles logarithmiques pour les utilisateurs et le p95).}\label{fig:charge}
+\end{figure}
+
+\begin{table}[htbp]\centering\small
+\begin{tabular}{lcccccc}
+\toprule
+Config. & Palier & \textbf{Capacité} & p95 & RAM & Débit max & /vCPU\\
+\midrule
+1w / 0,5 vCPU & 5 users & \textbf{29,8 req/s} & 120 ms & 305 Mo & 32,4 req/s & 65\\
+2w / 1 vCPU & 10 users & \textbf{55,8 req/s} & 110 ms & 550 Mo & 55,8 req/s & 56\\
+4w / 2 vCPU & 10 users & \textbf{$\geq$ 60,2 req/s} & 60 ms & 1,05 Go & 81,6 req/s & 41\\
+\bottomrule
+\end{tabular}
+\caption{Capacité mesurée (p95 < 200 ms, 0\,\% d'erreur) et débit maximal par configuration.
+La colonne « /vCPU » rapporte le débit maximal au nombre de vCPU.}\label{tab:capacite}
+\end{table}
+
+La figure~\ref{fig:charge} et le tableau~\ref{tab:capacite} conduisent à trois constats.
+Premièrement, le débit croît avec les ressources, mais de moins en moins vite : 65, puis 56,
+puis 41 requêtes par seconde et par vCPU. Au-delà de 2 vCPU, une autre limite apparaît, que
+le banc de test ne permet pas de départager (générateur de charge, écriture en base ou poste
+lui-même). Deuxièmement, une fois la saturation atteinte, le débit ne plafonne pas : il
+\emph{baisse}, pendant que la latence explose, parce que les requêtes s'accumulent en file
+d'attente. Il faut donc dimensionner avec une marge, et non au plus juste. Troisièmement, la
+mémoire augmente d'environ 250 Mo par worker, ce qui reste modeste. Pour 4 workers, le
+palier de 10 utilisateurs n'est pas saturé et le suivant dépasse 200 ms : la capacité réelle
+se situe entre 60 et 82 requêtes par seconde.
+
+\subsection{Recommandation}
+
+\begin{encadre}[title=Dimensionnement recommandé]
+\textbf{Unité : 2 workers, 1 vCPU, 1 Go de mémoire.} Elle tient \textbf{55,8 req/s} avec un
+p95 de 110 ms et aucune erreur, soit la meilleure capacité garantie par vCPU mesurée. En
+gardant 30\,\% de marge, on compte environ 39 req/s par instance :
+\[
+  \text{instances} = \left\lceil \frac{\text{pointe (req/s)}}{39} \right\rceil
+\]
+Exemples : 30 req/s $\rightarrow$ 1 instance ; 100 req/s $\rightarrow$ 3 instances ;
+200 req/s $\rightarrow$ 6 instances derrière un répartiteur de charge.
+\end{encadre}
+
+Ajouter des instances de cette taille plutôt que grossir une instance unique est préférable
+pour deux raisons : le rendement par vCPU décroît au-delà de 1 vCPU, et plusieurs instances
+apportent en prime une tolérance à la panne de l'une d'elles.
+
+% ================================================================== 13
+\section{Démonstration de bout en bout}\label{sec:demo}
+
+\subsection{Scénario}
+
+L'intégration doit être démontrée, et pas seulement décrite. La commande \code{retail demo}
+enchaîne automatiquement un fonctionnement nominal et des incidents contrôlés, et vérifie à
+chaque étape le résultat attendu. Le tableau~\ref{tab:demo} présente les résultats observés
+lors de l'exécution du 10 novembre 2026, dont la sortie complète est reproduite à la
+figure~\ref{fig:demo.png}.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{c l X}
+\toprule
+& Scène & Résultat observé\\
+\midrule
+0 & Vérifications & API, MLflow, PostgreSQL et Prometheus joignables ; version 7 servie depuis MLflow ; 4 règles d'alerte chargées\\
+1 & Fonctionnement nominal & 50 prédictions pour la semaine W41 ; livraison du lot W41 ; 50 feedbacks automatiques ; WAPE de production de 0,70\\
+2 & Lot invalide & \code{2099-W01} rejeté par 3 contrôles ; aucun entraînement ; alerte reçue par l'API\\
+3 & Base de données coupée & \code{/predict} répond toujours ; \code{db_ok} passe à faux ; \code{RetailDbDown} déclenchée ; retour à la normale après redémarrage\\
+4 & Retour arrière & champion 7 $\rightarrow$ 6, puis restauration de la version 7\\
+5 & Bilan & récapitulatif des endroits où vérifier chaque preuve\\
+\bottomrule
+\end{tabularx}
+\caption{Scènes de la démonstration et résultats observés.}\label{tab:demo}
+\end{table}
+
+\subsection{Preuves}
+
+Les captures suivantes complètent celle du tableau de bord (figure~\ref{fig:grafana.png}).
+Le registre MLflow (figures~\ref{fig:mlflow.png} et~\ref{fig:mlflow_v7.png}) montre les
+versions successives, l'alias qui désigne la version servie et la décision de promotion
+écrite sur chacune. Prefect (figures~\ref{fig:prefect.png} et~\ref{fig:prefect_runs.png})
+montre une exécution déclenchée automatiquement et l'historique des exécutions, y compris
+les échecs, sur lesquels revient la section~\ref{sec:limites}.
+
+\capture[0.97\linewidth]{mlflow.png}{Registre MLflow : versions 7 et 6, alias \code{champion} et \code{challenger} sur la version 7, tags de traçabilité (\code{until_week}, \code{features_hash}, \code{previous_champion}, \code{decision}\ldots).}
+\capture[0.97\linewidth]{mlflow_v7.png}{Fiche de la version 7 : la décision de promotion est écrite en tag (« MAE 242,94 $\leq$ champion 6 MAE 243,01 sur le même jeu de test »).}
+\capture[0.97\linewidth]{prefect.png}{Prefect : exécution \code{venerable-vole}, déclenchée automatiquement par la planification (\emph{auto-scheduled}) : validation du lot 2011-W47, puis entraînement et enregistrement de la version 6, terminée en 10 s. Le retard affiché correspond au rattrapage des exécutions planifiées après le redémarrage du service.}
+\capture[0.97\linewidth]{prefect_runs.png}{Historique Prefect sur une semaine. Vert : exécutions réussies ; jaune : exécutions planifiées restées en retard pendant l'arrêt du service ; rouge, orange et gris : échecs, plantage et annulation du 9 novembre, causés par la saturation mémoire du poste et un serveur MLflow figé (section~\ref{sec:limites}).}
+\capture[0.95\linewidth]{demo.png}{Sortie complète de \code{retail demo --reset-cursor} (10 novembre 2026) : les six scènes sont validées. Seuls les accents, déformés par la console Windows, ont été rétablis.}
+
+\subsection{Incidents rencontrés et corrigés}
+
+La mise au point a fait apparaître de véritables incidents d'exploitation. Plutôt que de
+les masquer, ils ont été documentés et corrigés ; les plus significatifs sont résumés
+dans le tableau~\ref{tab:incidents}, et la liste complète figure dans
+\code{docs/SYNTHESE_OPS.md}. Leur point commun est instructif : la plupart étaient
+\emph{silencieux} tant qu'aucun indicateur ne les mesurait.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{X X}
+\toprule
+Incident & Correction\\
+\midrule
+Workers Uvicorn tués au démarrage sous contrainte CPU (délai de santé de 5 s dépassé) &
+délai relevé à 60 s, imports allégés\\
+Lecture du dossier panel à chaque requête, environ 400 ms sur un volume monté &
+cache de 5 s : débit multiplié par 2 à 3\\
+79\,\% des traces perdues sous charge, compteur à zéro &
+insertion par lot, abandons comptés\\
+Métriques vides dans le conteneur (dossier multiprocessus sur un volume Windows) &
+dossier en mémoire (\code{tmpfs})\\
+Deux processus sur le port 8001, Prometheus observait le mauvais &
+procédure : arrêter le conteneur avant l'API du poste\\
+Exécutions du pipeline absentes de la base après \code{retail replay} &
+écriture directe au lieu d'un fil d'arrière-plan\\
+Versions identiques créées en rejouant une même semaine &
+réutilisation de la version existante\\
+Alerte de 10 s invisible dans Grafana (pas de requête de 15 s) &
+pas aligné sur la collecte Prometheus (5 s)\\
+Mémoire de Windows épuisée par la machine virtuelle de Docker &
+mémoire de Docker limitée, \code{OPENBLAS_NUM_THREADS=1}\\
+\bottomrule
+\end{tabularx}
+\caption{Incidents d'exploitation et corrections.}\label{tab:incidents}
+\end{table}
+
+% ================================================================== 14
+\section{Bilan au regard des critères d'évaluation}\label{sec:bilan}
+
+Le tableau~\ref{tab:bilan} met en regard chaque critère du cahier des charges et la preuve
+correspondante dans le projet.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.2cm} X}
+\toprule
+Critère & Ce qui est démontré\\
+\midrule
+Qualité du code (20\,\%) & paquet modulaire, configuration validée au démarrage, 131 tests, lint \code{ruff}, CI sur trois versions de Python (section~\ref{sec:code})\\
+Reproductibilité (10\,\%) & dépendances verrouillées, données vérifiées par empreinte, chaîne rejouée avec succès depuis un clone neuf (tableau~\ref{tab:clone})\\
+Intégration MLOps (20\,\%) & lot $\rightarrow$ qualité $\rightarrow$ entraînement $\rightarrow$ registre $\rightarrow$ API $\rightarrow$ prévision $\rightarrow$ feedback, automatisé par Prefect ; 7 versions produites (sections~\ref{sec:qualite} à~\ref{sec:orchestration})\\
+Fiabilité et traçabilité (20\,\%) & contrôles bloquants, relances limitées aux pannes, règle de promotion tracée, retour arrière, mode dégradé, incidents documentés (sections~\ref{sec:registre} et~\ref{sec:demo})\\
+Exploitation du service (20\,\%) & API validée et versionnée, traces et feedbacks persistés, WAPE de production, tableau de bord et alertes (sections~\ref{sec:api} à~\ref{sec:supervision})\\
+Dimensionnement (10\,\%) & protocole par paliers sur trois configurations, critère explicite, recommandation chiffrée et justifiée (section~\ref{sec:charge})\\
+\bottomrule
+\end{tabularx}
+\caption{Correspondance entre les critères d'évaluation et les preuves apportées.}\label{tab:bilan}
+\end{table}
+
+% ================================================================== 15
+\section{Limites connues}\label{sec:limites}
+
+Plusieurs limites subsistent ; elles sont connues et n'affectent pas la démonstration, mais
+il serait nécessaire de les traiter avant un usage réel.
+
+\begin{itemize}
+  \item \textbf{Banc de charge sur un seul poste.} L'API, le générateur de charge et les
+        services de supervision se partagent la même machine ; la limite observée au-delà
+        de 2 vCPU ne peut pas être attribuée avec certitude.
+  \item \textbf{Latences mesurées côté serveur.} Elles commencent à la prise en charge de la
+        requête et excluent l'attente qui la précède ; vue du client, la latence sous charge
+        est plus élevée.
+  \item \textbf{Ressources du poste.} Le 9 novembre, la machine virtuelle de Docker a réservé
+        plus de 12 Go ; la mémoire engagée de Windows s'est épuisée, des exécutions Prefect
+        ont échoué et MLflow s'est figé. La mémoire de Docker est désormais limitée, mais
+        l'épisode rappelle que l'environnement d'exécution fait partie du système.
+  \item \textbf{Prévision faite par la version précédente.} Juste après une promotion, l'API
+        peut servir encore l'ancien champion pendant au plus 30 secondes ; la prévision de
+        la semaine suivante est alors attribuée, à juste titre, à cette version.
+  \item \textbf{Feedback immédiat.} Un retour envoyé dans la seconde qui suit la prédiction
+        peut être refusé, le temps que la prédiction soit écrite en base.
+  \item \textbf{Alertes enregistrées deux fois.} Une alerte du pipeline est stockée à la fois
+        par l'API qui la reçoit et par le pipeline qui l'émet.
+  \item \textbf{Empreinte des données.} Le tag \code{data_hash} identifie l'archive complète ;
+        la tranche réellement utilisée est donnée par \code{until_week} et
+        \code{features_hash}.
+  \item \textbf{Exécution locale.} Il n'y a ni haute disponibilité ni déploiement distant,
+        conformément au cadre du projet.
+\end{itemize}
+
+% ================================================================== 16
+\section{Conclusion}
+
+Ce projet répond à la problématique posée en introduction par une chaîne complète et
+vérifiée. Elle est \textbf{fiable} : les données sont contrôlées avant tout entraînement, les
+erreurs de données sont distinguées des pannes, et une coupure de la base est absorbée sans
+interrompre le service. Elle est \textbf{traçable} : chaque version est reliée à ses données
+et à la décision qui l'a mise en service, chaque prévision à la version qui l'a produite, et
+le retour arrière tient en une commande. Elle est \textbf{exploitable} : le service est
+mesuré, supervisé, alerté, et son dimensionnement repose sur des mesures plutôt que sur une
+estimation.
+
+La démarche a été autant itérative que constructive. Les tests de charge ont révélé un goulot
+d'étranglement et une perte silencieuse de traces ; la vérification depuis un clone neuf a
+révélé un dépôt incomplet ; l'exploitation sur plusieurs jours a révélé une saturation
+mémoire. Chacun de ces problèmes a été corrigé puis rendu observable. C'est sans doute
+l'enseignement principal du projet : en exploitation, ce qui n'est pas mesuré ne peut pas
+être garanti.
+
+\paragraph{Pistes d'amélioration.} Mesurer la charge avec un générateur placé sur une autre
+machine ; ajouter un palier intermédiaire pour préciser la capacité à 4 workers ; protéger
+l'API contre la surcharge par une limite de concurrence ; recharger le champion dans l'API
+dès la promotion ; calculer l'empreinte des données sur la seule tranche d'entraînement.
+
+% ================================================================== annexes
+\appendix
+\section{Reproduire le projet}\label{ann:commandes}
+
+\begin{lstlisting}
+# Installation
+python -m venv .venv
+pip install -r requirements.lock
+pip install -e . --no-deps
+cp .env.example .env                 # Windows : copy .env.example .env
+retail check-config
+
+# Services
+docker compose up -d postgres mlflow prometheus grafana
+retail db-init
+
+# Données, qualité, premiers modèles
+retail data
+retail quality
+retail train --until-week 2011-W38
+retail train --until-week 2011-W40
+
+# Service et démonstration (API dans un autre terminal)
+retail api --host 0.0.0.0
+retail demo --reset-cursor
+
+# Orchestration
+prefect server start --host 127.0.0.1 --port 4201
+python flows/weekly_lot.py
+
+# Tests et charge
+pytest
+python load_tests/run.py
+\end{lstlisting}
+
+\section{Références}
+
+\begin{itemize}
+  \item Chen, D. (2015). \emph{Online Retail} [Dataset]. UCI Machine Learning Repository.
+        \url{https://doi.org/10.24432/C5BW33}
+  \item Chen, D., Sain, S. L., Guo, K. (2012). Data mining for the online retail industry:
+        A case study of RFM model-based customer segmentation using data mining.
+        \emph{Journal of Database Marketing and Customer Strategy Management}, 19(3), 197--208.
+  \item Documentations : MLflow, Prefect, FastAPI, Pandera, Prometheus, Grafana, Locust.
+\end{itemize}
+
+\end{document}
